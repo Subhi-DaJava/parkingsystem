@@ -39,8 +39,10 @@ public class ParkingSpot {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        //                 (ParkingSpot) meaning is cast o Object as a ParkingSpot object
         ParkingSpot that = (ParkingSpot) o;
         return number == that.number;
     }

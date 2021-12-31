@@ -13,7 +13,6 @@ What things you need to install the software and how to install them
 - Java 1.8
 - Maven 3.6.2
 - Mysql 8.0.17
-
 ### Installing
 
 A step by step series of examples that tell you how to get a development env running:
