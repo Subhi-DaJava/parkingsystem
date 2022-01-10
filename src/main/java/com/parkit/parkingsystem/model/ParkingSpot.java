@@ -34,21 +34,22 @@ public class ParkingSpot {
     }
 
     public void setAvailable(boolean available) {
-        isAvailable = available;
+        this.isAvailable = available;
     }
 
-    @Override
+  /*  @Override
     public boolean equals(Object o) {
 
         if (this == o) return true;
+        // (ParkingSpot) meaning is casting the o object of the class of Object as a ParkingSpot object
         if (o == null || getClass() != o.getClass()) return false;
-        //                 (ParkingSpot) meaning is cast o Object as a ParkingSpot object
         ParkingSpot that = (ParkingSpot) o;
         return number == that.number;
-    }
+    }*/
 
     @Override
     public int hashCode() {
         return number;
     }
 }
+

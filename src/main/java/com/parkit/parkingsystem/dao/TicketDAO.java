@@ -8,10 +8,10 @@ import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
+
+
+
 
 public class TicketDAO {
 
@@ -30,7 +30,7 @@ public class TicketDAO {
             ps.setString(2, ticket.getVehicleRegNumber());
             ps.setDouble(3, ticket.getPrice());
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
-            ps.setTimestamp(5, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
+            ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())) );
             return ps.execute();
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
@@ -86,4 +86,58 @@ public class TicketDAO {
         }
         return false;
     }
+
+    /**
+     * Comparer the existing VRN methode
+     * @param vehicleRegNumber
+     * @return
+     */
+    public boolean checkByVEHICLE_REG_NUMBER(String vehicleRegNumber){
+        Connection con = null;
+        ResultSet rs;
+        try {
+            con = dataBaseConfig.getConnection();
+            String check = "select * from ticket where VEHICLE_REG_NUMBER = ? and PRICE >=0 ";
+            PreparedStatement ps = con.prepareStatement(check);
+            ps.setString(1,vehicleRegNumber);
+            rs=ps.executeQuery();
+         if (rs.next())
+             return true;
+           else
+            return false;
+
+        }catch (Exception ex){
+            logger.error("Error comparing ticket info",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param vehicleRegNumber
+     * @return
+     */
+    public boolean checkByVEHICLE_REG_NUMBERifAlreadyParkingOrNot(String vehicleRegNumber){
+        Connection con = null;
+        ResultSet rs;
+        try {
+            con = dataBaseConfig.getConnection();
+            String check = "select * from ticket where VEHICLE_REG_NUMBER = ? and isnull(OUT_TIME) ";
+            PreparedStatement ps = con.prepareStatement(check);
+            ps.setString(1,vehicleRegNumber);
+            rs=ps.executeQuery();
+            if (rs.next())
+                return true;
+            else
+                return false;
+        }catch (Exception ex){
+            logger.error("Error comparing ticket info",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
+        return false;
+    }
+
 }
