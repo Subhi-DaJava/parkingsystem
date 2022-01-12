@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
 
 
@@ -17,23 +18,41 @@ public class FareCalculatorService {
 
         //TODO: Some tests are failing here. Need to check if this logic is correct
         double  duration = outMinute - inMinute;
+
+        TicketDAO ticketDAO = new TicketDAO();
+        boolean vehicleRecurring = ticketDAO.checkByVEHICLE_REG_NUMBER(ticket.getVehicleRegNumber());
+        double remise = 0.95;
         // Premières 30 minutes sont gratuites
         if( duration <= 30 )
             ticket.setPrice(0.0);
-        else {
+         else {
             switch (ticket.getParkingSpot().getParkingType()) {
-
                 case CAR: {
+                    if(vehicleRecurring == true) {
+                        ticket.setPrice(duration * Fare.CAR_RATE_PER_MINUTE * remise);
+                        System.out.println("You benefit from a 5% discount on the normal fee.\n");
+                    }
+                    else {
                         ticket.setPrice(duration * Fare.CAR_RATE_PER_MINUTE);
+                    }
                     break;
                 }
                 case BIKE: {
+                    if(vehicleRecurring == true) {
+                        ticket.setPrice(duration * Fare.BIKE_RATE_PER_MINUTE * remise);
+                        System.out.println("You benefit from a 5% discount on the normal fee.\n");
+                    }else {
                         ticket.setPrice(duration * Fare.BIKE_RATE_PER_MINUTE);
+                    }
                     break;
                 }
                 default:
                     throw new IllegalArgumentException("Unknown Parking Type");
             }
         }
+
+
+
     }
+
 }

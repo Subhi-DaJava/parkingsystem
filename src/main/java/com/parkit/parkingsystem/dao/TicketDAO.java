@@ -88,7 +88,7 @@ public class TicketDAO {
     }
 
     /**
-     * Comparer the existing VRN methode
+     * Methode verify the vehicle recurrent in the parking
      * @param vehicleRegNumber
      * @return
      */
@@ -97,7 +97,7 @@ public class TicketDAO {
         ResultSet rs;
         try {
             con = dataBaseConfig.getConnection();
-            String check = "select * from ticket where VEHICLE_REG_NUMBER = ? and PRICE >=0 ";
+            String check = "select * from ticket where VEHICLE_REG_NUMBER = ? and PRICE > 0 ";
             PreparedStatement ps = con.prepareStatement(check);
             ps.setString(1,vehicleRegNumber);
             rs=ps.executeQuery();
