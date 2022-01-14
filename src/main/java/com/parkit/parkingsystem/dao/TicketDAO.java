@@ -36,8 +36,8 @@ public class TicketDAO {
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return false;
         }
+        return false;
     }
 
     public Ticket getTicket(String vehicleRegNumber) {
@@ -65,8 +65,8 @@ public class TicketDAO {
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return ticket;
         }
+        return ticket;
     }
 
     public boolean updateTicket(Ticket ticket) {
@@ -89,23 +89,17 @@ public class TicketDAO {
 
     /**
      * Methode verify the vehicle recurrent in the parking
-     * @param vehicleRegNumber check the vehicle is parked before or no.
+     * @param  vehicleRegNumber check the vehicle is parked before or no.
      * @return true means,the vehicle has been parked once min.
      */
     public boolean checkByVehicleRegNumber(String vehicleRegNumber){
         Connection con = null;
-        ResultSet rs;
         try {
             con = dataBaseConfig.getConnection();
             String check = "select * from ticket where VEHICLE_REG_NUMBER = ? and PRICE > 0 ";
             PreparedStatement ps = con.prepareStatement(check);
             ps.setString(1,vehicleRegNumber);
-            rs=ps.executeQuery();
-         if (rs.next())
-             return true;
-           else
-            return false;
-
+            return ps.executeQuery().next();
         }catch (Exception ex){
             logger.error("Error comparing ticket info",ex);
         }finally {
@@ -121,17 +115,12 @@ public class TicketDAO {
      */
     public boolean checkByVehicleRegNumberIfAlreadyParkingOrNot(String vehicleRegNumber){
         Connection con = null;
-        ResultSet rs;
         try {
             con = dataBaseConfig.getConnection();
             String check = "select * from ticket where VEHICLE_REG_NUMBER = ? and isnull(OUT_TIME) ";
             PreparedStatement ps = con.prepareStatement(check);
             ps.setString(1,vehicleRegNumber);
-            rs=ps.executeQuery();
-            if (rs.next())
-                return true;
-            else
-                return false;
+            return ps.executeQuery().next();
         }catch (Exception ex){
             logger.error("Error comparing ticket info",ex);
         }finally {

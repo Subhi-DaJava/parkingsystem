@@ -114,10 +114,9 @@ public class ParkingService {
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket;
             boolean vehicleParking = ticketDAO.checkByVehicleRegNumberIfAlreadyParkingOrNot(vehicleRegNumber);
-            while (!vehicleParking){
-                System.out.println("This vehicle is not parking here yet.");
-                vehicleRegNumber = getVehicleRegNumber();
-                vehicleParking = ticketDAO.checkByVehicleRegNumberIfAlreadyParkingOrNot(vehicleRegNumber);
+            if(!vehicleParking) {
+                System.out.println("This vehicle is not parked here yet.");
+            return ;
             }
             ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
