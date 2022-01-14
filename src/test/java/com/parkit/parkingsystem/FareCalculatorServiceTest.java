@@ -2,6 +2,7 @@ package com.parkit.parkingsystem;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
@@ -56,7 +57,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareUnkownType(){
+    public void calculateFareUnknownType(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         Date outTime = new Date();
@@ -174,6 +175,25 @@ public class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(ticket);
         assertEquals( 0.0, ticket.getPrice());
     }
+    @Test
+    public void calculateFarForCarWithDiscountLessThanOneHour(){
+        String vehicleRegNumber = "ABCDE";
+        TicketDAO ticketDAO = new TicketDAO();
 
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - ( 45 * 60 * 1000) );
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+
+        ticketDAO.checkByVehicleRegNumber(vehicleRegNumber);
+
+        fareCalculatorService.calculateFare(ticket);
+        assertEquals( 45* Fare.CAR_RATE_PER_MINUTE*0.95, ticket.getPrice());
+
+    }
+    //
 
 }

@@ -32,16 +32,15 @@ public class ParkingService {
 
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
-                //String vehicleRegNumber = getVehicleRegNumber();
-                //check the reg_number
-                String vehicleRegNumber= enterTheReg_NumberForCheckingWhenVehicleArrive();
 
-                boolean checkTheREG_Number = ticketDAO.checkByVEHICLE_REG_NUMBERifAlreadyParkingOrNot(vehicleRegNumber);
+                String vehicleRegNumber= enterTheVehicleRegNumberForCheckingWhenVehicleArrive();
+
+                boolean checkTheREG_Number = ticketDAO.checkByVehicleRegNumberIfAlreadyParkingOrNot(vehicleRegNumber);
 
                 while (checkTheREG_Number) {
                     System.out.println("This vehicle, registration number " +vehicleRegNumber+" is parking now. Please re_type the your vehicle registration number.");
-                    vehicleRegNumber = enterTheReg_NumberForCheckingWhenVehicleArrive();       //getVehicleRegNumber();
-                    checkTheREG_Number = ticketDAO.checkByVEHICLE_REG_NUMBERifAlreadyParkingOrNot(vehicleRegNumber);
+                    vehicleRegNumber = enterTheVehicleRegNumberForCheckingWhenVehicleArrive();       //getVehicleRegNumber();
+                    checkTheREG_Number = ticketDAO.checkByVehicleRegNumberIfAlreadyParkingOrNot(vehicleRegNumber);
                 }
 
                 parkingSpot.setAvailable(false);
@@ -73,7 +72,7 @@ public class ParkingService {
     }
 
     public ParkingSpot getNextParkingNumberIfAvailable(){
-        int parkingNumber=0;
+        int parkingNumber; // parkingNumber =0;
         ParkingSpot parkingSpot = null;
         try{
             ParkingType parkingType = getVehicleType();
@@ -113,8 +112,14 @@ public class ParkingService {
     public void processExitingVehicle() {
         try{
             String vehicleRegNumber = getVehicleRegNumber();
-
-            Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+            Ticket ticket;
+            boolean vehicleParking = ticketDAO.checkByVehicleRegNumberIfAlreadyParkingOrNot(vehicleRegNumber);
+            while (!vehicleParking){
+                System.out.println("This vehicle is not parking here yet.");
+                vehicleRegNumber = getVehicleRegNumber();
+                vehicleParking = ticketDAO.checkByVehicleRegNumberIfAlreadyParkingOrNot(vehicleRegNumber);
+            }
+            ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
             fareCalculatorService.calculateFare(ticket);
@@ -132,12 +137,12 @@ public class ParkingService {
         }
     }
 
-    public String enterTheReg_NumberForCheckingWhenVehicleArrive() throws Exception {
+    public String enterTheVehicleRegNumberForCheckingWhenVehicleArrive() throws Exception {
 
         System.out.println("Hello, please enter your license plate number first.");
         String vehicleRegNumberRecurrent = inputReaderUtil.readVehicleRegistrationNumber();
 
-        if (ticketDAO.checkByVEHICLE_REG_NUMBER(vehicleRegNumberRecurrent)) {
+        if (ticketDAO.checkByVehicleRegNumber(vehicleRegNumberRecurrent)) {
             System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.\n");
         }else {
             System.out.println("Welcome to our parking ! \n");

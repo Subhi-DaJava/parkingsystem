@@ -18,18 +18,19 @@ public class FareCalculatorService {
 
         //TODO: Some tests are failing here. Need to check if this logic is correct
         double  duration = outMinute - inMinute;
+        double discount = 0.95;
 
         TicketDAO ticketDAO = new TicketDAO();
-        boolean vehicleRecurring = ticketDAO.checkByVEHICLE_REG_NUMBER(ticket.getVehicleRegNumber());
-        double remise = 0.95;
+        boolean vehicleRecurring = ticketDAO.checkByVehicleRegNumber(ticket.getVehicleRegNumber());
+
         // Premières 30 minutes sont gratuites
         if( duration <= 30 )
             ticket.setPrice(0.0);
          else {
             switch (ticket.getParkingSpot().getParkingType()) {
                 case CAR: {
-                    if(vehicleRecurring == true) {
-                        ticket.setPrice(duration * Fare.CAR_RATE_PER_MINUTE * remise);
+                    if(vehicleRecurring) {
+                        ticket.setPrice(duration * Fare.CAR_RATE_PER_MINUTE * discount);
                         System.out.println("You benefit from a 5% discount on the normal fee.\n");
                     }
                     else {
@@ -38,8 +39,8 @@ public class FareCalculatorService {
                     break;
                 }
                 case BIKE: {
-                    if(vehicleRecurring == true) {
-                        ticket.setPrice(duration * Fare.BIKE_RATE_PER_MINUTE * remise);
+                    if(vehicleRecurring) {
+                        ticket.setPrice(duration * Fare.BIKE_RATE_PER_MINUTE * discount);
                         System.out.println("You benefit from a 5% discount on the normal fee.\n");
                     }else {
                         ticket.setPrice(duration * Fare.BIKE_RATE_PER_MINUTE);

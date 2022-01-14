@@ -89,10 +89,10 @@ public class TicketDAO {
 
     /**
      * Methode verify the vehicle recurrent in the parking
-     * @param vehicleRegNumber
-     * @return
+     * @param vehicleRegNumber check the vehicle is parked before or no.
+     * @return true means,the vehicle has been parked once min.
      */
-    public boolean checkByVEHICLE_REG_NUMBER(String vehicleRegNumber){
+    public boolean checkByVehicleRegNumber(String vehicleRegNumber){
         Connection con = null;
         ResultSet rs;
         try {
@@ -116,10 +116,10 @@ public class TicketDAO {
 
     /**
      *
-     * @param vehicleRegNumber
-     * @return
+     * @param vehicleRegNumber check vehicle is or is not in the parking.
+     * @return true means the vehicle is here now.
      */
-    public boolean checkByVEHICLE_REG_NUMBERifAlreadyParkingOrNot(String vehicleRegNumber){
+    public boolean checkByVehicleRegNumberIfAlreadyParkingOrNot(String vehicleRegNumber){
         Connection con = null;
         ResultSet rs;
         try {
