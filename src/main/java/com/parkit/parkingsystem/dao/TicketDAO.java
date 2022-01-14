@@ -96,7 +96,7 @@ public class TicketDAO {
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
-            String check = "select * from ticket where VEHICLE_REG_NUMBER = ? and PRICE > 0 ";
+            String check = DBConstants.VERIFY_REG_NUMBER;
             PreparedStatement ps = con.prepareStatement(check);
             ps.setString(1,vehicleRegNumber);
             return ps.executeQuery().next();
@@ -113,11 +113,11 @@ public class TicketDAO {
      * @param vehicleRegNumber check vehicle is or is not in the parking.
      * @return true means the vehicle is here now.
      */
-    public boolean checkByVehicleRegNumberIfAlreadyParkingOrNot(String vehicleRegNumber){
+    public boolean checkByVehicleRegNumberIfVehicleParkedOrNot(String vehicleRegNumber){
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
-            String check = "select * from ticket where VEHICLE_REG_NUMBER = ? and isnull(OUT_TIME) ";
+            String check = DBConstants.COUNT_TICKET;
             PreparedStatement ps = con.prepareStatement(check);
             ps.setString(1,vehicleRegNumber);
             return ps.executeQuery().next();

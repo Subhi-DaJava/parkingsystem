@@ -29,20 +29,15 @@ public class ParkingService {
 
     public void processIncomingVehicle() {
         try{
-
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
 
-                String vehicleRegNumber= enterTheVehicleRegNumberForCheckingWhenVehicleArrive();
-
-                boolean checkTheREG_Number = ticketDAO.checkByVehicleRegNumberIfAlreadyParkingOrNot(vehicleRegNumber);
-
-                while (checkTheREG_Number) {
-                    System.out.println("This vehicle, registration number " +vehicleRegNumber+" is parking now. Please re_type the your vehicle registration number.");
-                    vehicleRegNumber = enterTheVehicleRegNumberForCheckingWhenVehicleArrive();       //getVehicleRegNumber();
-                    checkTheREG_Number = ticketDAO.checkByVehicleRegNumberIfAlreadyParkingOrNot(vehicleRegNumber);
+                String vehicleRegNumber = enterTheVehicleRegNumberForCheckingWhenVehicleArrive();
+                boolean isAlreadyParked = ticketDAO.checkByVehicleRegNumberIfVehicleParkedOrNot(vehicleRegNumber);
+                if (isAlreadyParked) {
+                    System.out.println("This vehicle, registration number " +vehicleRegNumber+" is parking now.\n");
+                    return;
                 }
-
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allow this parking space and mark its availability as false
 
@@ -57,8 +52,8 @@ public class ParkingService {
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
                 System.out.println("Generated Ticket and saved in DB");
-                System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
-                System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime+"\n");
+                System.out.println("Please park your vehicle in spot number: "+parkingSpot.getId());
+                System.out.println("Recorded in-time for vehicle number: "+vehicleRegNumber+" is:"+inTime+"\n");
 
             }
         }catch(Exception e){
@@ -113,9 +108,9 @@ public class ParkingService {
         try{
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket;
-            boolean vehicleParking = ticketDAO.checkByVehicleRegNumberIfAlreadyParkingOrNot(vehicleRegNumber);
-            if(!vehicleParking) {
-                System.out.println("This vehicle is not parked here yet.");
+            boolean isVehicleParked = ticketDAO.checkByVehicleRegNumberIfVehicleParkedOrNot(vehicleRegNumber);
+            if(!isVehicleParked) {
+                System.out.println("This vehicle is not parked here yet.\n");
             return ;
             }
             ticket = ticketDAO.getTicket(vehicleRegNumber);
@@ -127,7 +122,7 @@ public class ParkingService {
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
                 System.out.println("Please pay the parking fare:" + ticket.getPrice());
-                System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime+"\n");
+                System.out.println("Recorded out-time for vehicle number: " + ticket.getVehicleRegNumber() + " is: " + outTime+"\n");
             }else{
                 System.out.println("Unable to update ticket information. Error occurred");
             }
@@ -142,7 +137,7 @@ public class ParkingService {
         String vehicleRegNumberRecurrent = inputReaderUtil.readVehicleRegistrationNumber();
 
         if (ticketDAO.checkByVehicleRegNumber(vehicleRegNumberRecurrent)) {
-            System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.\n");
+            System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
         }else {
             System.out.println("Welcome to our parking ! \n");
         }

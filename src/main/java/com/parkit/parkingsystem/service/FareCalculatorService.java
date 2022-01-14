@@ -12,16 +12,18 @@ public class FareCalculatorService {
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
 
-        double inMinute = ticket.getInTime().getTime() / (1000*60 );
+        double inMinute = (double) ticket.getInTime().getTime() / (1000*60 );
+        double outMinute = (double) ticket.getOutTime().getTime() / (1000*60 );
 
-        double outMinute =ticket.getOutTime().getTime() / (1000*60 );
-
-        //TODO: Some tests are failing here. Need to check if this logic is correct
         double  duration = outMinute - inMinute;
-        double discount = 0.95;
+        double discount = 1;
 
         TicketDAO ticketDAO = new TicketDAO();
-        boolean vehicleRecurring = ticketDAO.checkByVehicleRegNumber(ticket.getVehicleRegNumber());
+        boolean isVehicleRecurring = ticketDAO.checkByVehicleRegNumber(ticket.getVehicleRegNumber());
+
+        double parkingFee = discount * duration;
+        if (isVehicleRecurring)
+            parkingFee *= (discount-0.05);
 
         // Premières 30 minutes sont gratuites
         if( duration <= 30 )
@@ -29,30 +31,18 @@ public class FareCalculatorService {
          else {
             switch (ticket.getParkingSpot().getParkingType()) {
                 case CAR: {
-                    if(vehicleRecurring) {
-                        ticket.setPrice(duration * Fare.CAR_RATE_PER_MINUTE * discount);
-                        System.out.println("You benefit from a 5% discount on the normal fee.\n");
-                    }
-                    else {
-                        ticket.setPrice(duration * Fare.CAR_RATE_PER_MINUTE);
-                    }
-                    break;
+                    ticket.setPrice(parkingFee * Fare.CAR_RATE_PER_MINUTE );
+                     break;
                 }
                 case BIKE: {
-                    if(vehicleRecurring) {
-                        ticket.setPrice(duration * Fare.BIKE_RATE_PER_MINUTE * discount);
-                        System.out.println("You benefit from a 5% discount on the normal fee.\n");
-                    }else {
-                        ticket.setPrice(duration * Fare.BIKE_RATE_PER_MINUTE);
-                    }
+                    ticket.setPrice(parkingFee * Fare.BIKE_RATE_PER_MINUTE );
                     break;
                 }
                 default:
                     throw new IllegalArgumentException("Unknown Parking Type");
             }
+
         }
-
-
 
     }
 
