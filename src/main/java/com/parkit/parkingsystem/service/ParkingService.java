@@ -67,7 +67,7 @@ public class ParkingService {
     }
 
     public ParkingSpot getNextParkingNumberIfAvailable(){
-        int parkingNumber; // parkingNumber =0;
+        int parkingNumber; // parkingNumber = 0;
         ParkingSpot parkingSpot = null;
         try{
             ParkingType parkingType = getVehicleType();
@@ -116,7 +116,9 @@ public class ParkingService {
             ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
+
             fareCalculatorService.calculateFare(ticket);
+
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
@@ -131,6 +133,11 @@ public class ParkingService {
         }
     }
 
+    /**
+     * Check the vehicle is recurring or not
+     * @return the vehicle register number
+     * @throws Exception throw null pointer exception
+     */
     public String enterTheVehicleRegNumberForCheckingWhenVehicleArrive() throws Exception {
 
         System.out.println("Hello, please enter your license plate number first.");

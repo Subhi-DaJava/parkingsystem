@@ -17,7 +17,7 @@ public class DataBaseConfig {
     }
 
     public void closeConnection(Connection con){
-        if(con!=null){
+        if(con != null){
             try {
                 con.close();
                 logger.info("Closing DB connection");
@@ -28,7 +28,7 @@ public class DataBaseConfig {
     }
 
     public void closePreparedStatement(PreparedStatement ps) {
-        if(ps!=null){
+        if(ps != null){
             try {
                 ps.close();
                 logger.info("Closing Prepared Statement");

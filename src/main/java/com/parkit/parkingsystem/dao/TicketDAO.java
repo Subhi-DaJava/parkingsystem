@@ -10,9 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 
-
-
-
 public class TicketDAO {
 
     private static final Logger logger = LogManager.getLogger("TicketDAO");
@@ -96,8 +93,7 @@ public class TicketDAO {
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
-            String check = DBConstants.VERIFY_REG_NUMBER;
-            PreparedStatement ps = con.prepareStatement(check);
+            PreparedStatement ps = con.prepareStatement(DBConstants.VERIFY_REG_NUMBER);
             ps.setString(1,vehicleRegNumber);
             return ps.executeQuery().next();
         }catch (Exception ex){
@@ -109,24 +105,26 @@ public class TicketDAO {
     }
 
     /**
-     *
-     * @param vehicleRegNumber check vehicle is or is not in the parking.
+     * check vehicle is or is not in the parking.
+     * @param vehicleRegNumber
      * @return true means the vehicle is here now.
      */
     public boolean checkByVehicleRegNumberIfVehicleParkedOrNot(String vehicleRegNumber){
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
-            String check = DBConstants.COUNT_TICKET;
-            PreparedStatement ps = con.prepareStatement(check);
+            PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_TICKET);
             ps.setString(1,vehicleRegNumber);
             return ps.executeQuery().next();
         }catch (Exception ex){
+
             logger.error("Error comparing ticket info",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
         }
         return false;
     }
+
+
 
 }

@@ -33,19 +33,18 @@ public class ParkingSpot {
         return isAvailable;
     }
 
-    public void setAvailable(boolean available) {
-        this.isAvailable = available;
+    public void setAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
     }
 
-  /*  @Override
+      @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
-        // (ParkingSpot) meaning is casting the o object of the class of Object as a ParkingSpot object
+        //(ParkingSpot) meaning is casting the o object of the class of Object as a ParkingSpot object
         if (o == null || getClass() != o.getClass()) return false;
         ParkingSpot that = (ParkingSpot) o;
         return number == that.number;
-    }*/
+    }
 
     @Override
     public int hashCode() {
