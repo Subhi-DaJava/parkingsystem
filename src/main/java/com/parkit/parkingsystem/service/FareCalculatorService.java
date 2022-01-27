@@ -17,17 +17,10 @@ public class FareCalculatorService {
         }
         TicketDAO ticketDAO = new TicketDAO();
 
-        double inMinute = (double) ticket.getInTime().getTime() / (1000 * 60 );
-        double outMinute =(double) ticket.getOutTime().getTime() / (1000 * 60 );
+        long inMinute = ticket.getInTime().getTime();
+        long outMinute =ticket.getOutTime().getTime();
 
-        double  duration = outMinute - inMinute;
-        double discountRate = 1.0;
-        boolean isVehicleRecurring = ticketDAO.checkByVehicleRegNumber(ticket.getVehicleRegNumber());
-
-        double parkingFee = discountRate * duration;
-        if (isVehicleRecurring) {
-            parkingFee = parkingFee * (discountRate - 0.05);
-        }
+        double  duration = (double) (outMinute - inMinute) / (1000 * 60 );
 
         // Premières 30 minutes sont gratuites
         if( duration <= 30 )
@@ -35,11 +28,11 @@ public class FareCalculatorService {
         else {
             switch (ticket.getParkingSpot().getParkingType()) {
                 case CAR: {
-                    ticket.setPrice(Precision.round(parkingFee * Fare.CAR_RATE_PER_MINUTE,2));
+                    ticket.setPrice(Precision.round( Fare.CAR_RATE_PER_MINUTE * duration,2));
                      break;
                 }
                 case BIKE: {
-                    ticket.setPrice(Precision.round(parkingFee * Fare.BIKE_RATE_PER_MINUTE,2));
+                    ticket.setPrice(Precision.round( Fare.BIKE_RATE_PER_MINUTE * duration,2));
                     break;
                 }
                 default:

@@ -8,6 +8,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,6 +67,15 @@ public class ParkingServiceTest {
         verify(ticketDAO).checkByVehicleRegNumberIfVehicleParkedOrNot(anyString());
         verify(inputReaderUtil,times(1)).readVehicleRegistrationNumber();
     }
+
+
+    @Test
+    @Disabled
+    public void processIncomingVehicleTest(){
+
+    }
+
+
 
 
 

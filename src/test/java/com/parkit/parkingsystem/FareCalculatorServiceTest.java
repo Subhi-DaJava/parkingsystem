@@ -3,6 +3,7 @@ package com.parkit.parkingsystem;
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 
-import org.mockito.Spy;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -198,8 +199,9 @@ public class FareCalculatorServiceTest {
         assertEquals( 0.0, ticket.getPrice());
     }
 
-    //un test pour remise en mock la class ticket
 
+
+    //un test pour remise en mock la class ticket
     //vérify the véhicule récurrent or not
 
     @Test
@@ -210,13 +212,10 @@ public class FareCalculatorServiceTest {
         assertTrue(ticketDAO.checkByVehicleRegNumber("abcde"));
         verify(ticketDAO,times(1)).checkByVehicleRegNumber(anyString());
     }
+
     @Test
-    public void calculateFarCarRemise() throws Exception {
+    public void calculateFarCarWithDiscount() throws Exception {
 
-
-
-        //when(ticketDAO.getTicket(vehicleRegNumber)).thenReturn(ticket);
-        //doReturn(true).when(ticketDAO).checkByVehicleRegNumber(anyString());
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - ( 60 * 60 * 1000) );
         Date outTime = new Date();
@@ -225,13 +224,14 @@ public class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-
-        when(ticketDAO.checkByVehicleRegNumber(ticket.getVehicleRegNumber())).thenReturn(true);
-
         fareCalculatorService.calculateFare(ticket);
+        //when(ticketDAO.checkByVehicleRegNumberIfVehicleParkedOrNot("abcde")).thenReturn(true);
+        when(ticketDAO.checkByVehicleRegNumber(anyString())).thenReturn(true);
+        double priceDiscount = Precision.round(ticket.getPrice() * 0.95,2);
+        ticket.setPrice(priceDiscount);
 
         assertEquals(Precision.round(60 * Fare.CAR_RATE_PER_MINUTE * 0.95,2), ticket.getPrice());
-        verify(ticketDAO,times(1)).checkByVehicleRegNumber(anyString());
+        //verify(ticketDAO, Mockito.times(1)).checkByVehicleRegNumber("abcde");
         //verify(ticketDAO).checkByVehicleRegNumber(vehicleRegNumber);
     }
 

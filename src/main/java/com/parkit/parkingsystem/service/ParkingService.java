@@ -6,6 +6,7 @@ import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.util.InputReaderUtil;
+import org.apache.commons.math3.util.Precision;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,15 +33,16 @@ public class ParkingService {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
 
-                String vehicleRegNumber = enterTheVehicleRegNumberForCheckingWhenVehicleArrive();
+                String vehicleRegNumber = getVehicleRegNumber();
+                parkingSpot.setAvailable(false);
+
                 boolean isAlreadyParked = ticketDAO.checkByVehicleRegNumberIfVehicleParkedOrNot(vehicleRegNumber);
                 if (isAlreadyParked) {
                     System.out.println("This vehicle, registration number " +vehicleRegNumber+" is parking now.\n");
                     return;
                 }
-                parkingSpot.setAvailable(false);
-                parkingSpotDAO.updateParking(parkingSpot);//allow this parking space and mark its availability as false
 
+                parkingSpotDAO.updateParking(parkingSpot);//allow this parking space and mark its availability as false
                 Date inTime = new Date();
                 Ticket ticket = new Ticket();
                 //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
@@ -50,6 +52,9 @@ public class ParkingService {
                 ticket.setPrice(0.0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
+                if(ticketDAO.checkByVehicleRegNumber(vehicleRegNumber)){
+                    System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+                }
                 ticketDAO.saveTicket(ticket);
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number: "+parkingSpot.getId());
@@ -61,11 +66,21 @@ public class ParkingService {
         }
     }
 
+    /**
+     * This method ask the client to type the reg number of his vehicle
+     * @return vehicle register number
+     * @throws Exception when the reg number is null
+     */
     private String getVehicleRegNumber() throws Exception {
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
 
+    /**
+     * This method check and return the availability of the parking spot
+     * in the database when the client enter the type of the vehicle
+     * @return ParkingSpot
+     */
     public ParkingSpot getNextParkingNumberIfAvailable(){
         int parkingNumber; // parkingNumber = 0;
         ParkingSpot parkingSpot = null;
@@ -85,6 +100,10 @@ public class ParkingService {
         return parkingSpot;
     }
 
+    /**
+     * This method ask the client the type of his vehicle
+     * @return ParkingType
+     */
     private ParkingType getVehicleType(){
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
@@ -104,26 +123,36 @@ public class ParkingService {
         }
     }
 
+    /**
+     *
+     */
     public void processExitingVehicle() {
         try{
             String vehicleRegNumber = getVehicleRegNumber();
-            Ticket ticket;
+            Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+
             boolean isVehicleParked = ticketDAO.checkByVehicleRegNumberIfVehicleParkedOrNot(vehicleRegNumber);
             if(!isVehicleParked) {
                 System.out.println("This vehicle is not parked here yet.\n");
             return ;
             }
-            ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
 
             fareCalculatorService.calculateFare(ticket);
+            //Check if the vehicle is recurring or not and if it is, calcul the price with 5% discount
+            double discountRate = 0.05;
+            if(ticketDAO.checkByVehicleRegNumber(ticket.getVehicleRegNumber())){
+                double priceDiscount = Precision.round(ticket.getPrice() * (1-discountRate),2);
+                ticket.setPrice(priceDiscount);
+            }
 
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
-                System.out.println("Please pay the parking fare:" + ticket.getPrice());
+                System.out.println("Please pay the parking fare: " + ticket.getPrice()+", parking time is : "
+                        + Precision.round(((double)ticket.getOutTime().getTime() / (1000 * 60 * 60 ) - (double) ticket.getInTime().getTime() / (1000 * 60 * 60 )), 2)+" hours.");
                 System.out.println("Recorded out-time for vehicle number: " + ticket.getVehicleRegNumber() + " is: " + outTime+"\n");
             }else{
                 System.out.println("Unable to update ticket information. Error occurred");
@@ -133,22 +162,5 @@ public class ParkingService {
         }
     }
 
-    /**
-     * Check the vehicle is recurring or not
-     * @return the vehicle register number
-     * @throws Exception throw null pointer exception
-     */
-    public String enterTheVehicleRegNumberForCheckingWhenVehicleArrive() throws Exception {
-
-        System.out.println("Hello, please enter your license plate number first.");
-        String vehicleRegNumberRecurrent = inputReaderUtil.readVehicleRegistrationNumber();
-
-        if (ticketDAO.checkByVehicleRegNumber(vehicleRegNumberRecurrent)) {
-            System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
-        }else {
-            System.out.println("Welcome to our parking ! \n");
-        }
-        return vehicleRegNumberRecurrent;
-    }
 
 }

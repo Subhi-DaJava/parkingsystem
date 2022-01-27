@@ -63,8 +63,10 @@ public class ParkingDataBaseIT {
 
         //verify(ticketDAO).getTicket("ABCDEF");
         //assertEquals("ABCDEF",ticketDAO.getTicket("ABCDEF"));
-        assertTrue(ticketDAO.getTicket("ABCDEF").getOutTime() == null);
-        assertTrue(ticketDAO.getTicket("ABCDEF").getInTime() != null);
+        //assertTrue(ticketDAO.getTicket("ABCDEF").getOutTime() == null);
+        //assertTrue(ticketDAO.getTicket("ABCDEF").getInTime() != null);
+        assertNull(ticketDAO.getTicket("ABCDEF").getOutTime());
+        assertNotNull(ticketDAO.getTicket("ABCDEF").getInTime());
 
         //assertTrue(parkingSpotDAO.updateParking(ticketDAO.getTicket("ABCEF").getParkingSpot()));
         //j'ai vérifié la disponibilité de la deuxième spot pour que 1 est déjà occupé ??
@@ -83,16 +85,16 @@ public class ParkingDataBaseIT {
     public void testParkingLotExit() throws Exception {
         //testParkingACar(); test should be independent
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
         parkingService.processExitingVehicle();
         //when(ticketDAO.checkByVehicleRegNumberIfVehicleParkedOrNot("ABCDEF")).thenReturn(true);
         //TODO: check that the fare generated and out time are populated correctly in the database
+        //Ticket ticket = ticketDAO.getTicket("abcde")
         //when(inputReaderUtil.readSelection()).thenReturn(2);
         //verify(inputReaderUtil).readSelection();
         //verify(inputReaderUtil).readVehicleRegistrationNumber();
         assertNotEquals(ticketDAO.getTicket("ABCDEF").getPrice(),0.0);
-        assertTrue(ticketDAO.getTicket("ABCDEF").getInTime() != null);
-
+        //assertTrue(ticketDAO.getTicket("ABCDEF").getInTime() != null);
+        assertNotNull(ticketDAO.getTicket("ABCDEF"));
     }
 
 }
