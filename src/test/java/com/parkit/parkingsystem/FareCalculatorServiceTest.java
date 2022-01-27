@@ -11,6 +11,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,7 +52,7 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( 30* Fare.CAR_RATE_PER_MINUTE, ticket.getPrice());
+        assertEquals( Precision.round(31 * Fare.CAR_RATE_PER_MINUTE,2), ticket.getPrice());
     }
 
     @Test
@@ -66,7 +67,7 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( 30 * Fare.BIKE_RATE_PER_MINUTE, ticket.getPrice());
+        assertEquals( Precision.round(31 * Fare.BIKE_RATE_PER_MINUTE,2), ticket.getPrice());
     }
 
     @Test
@@ -109,7 +110,7 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals(40 * Fare.BIKE_RATE_PER_MINUTE, ticket.getPrice());
+        assertEquals(Precision.round(45 * Fare.BIKE_RATE_PER_MINUTE,2), ticket.getPrice());
     }
 
     @Test
@@ -124,7 +125,7 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( 45 * Fare.CAR_RATE_PER_MINUTE, ticket.getPrice());
+        assertEquals( Precision.round(45 * Fare.CAR_RATE_PER_MINUTE, 2),ticket.getPrice());
     }
 
     @Test
@@ -139,7 +140,7 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( 24*60 * Fare.CAR_RATE_PER_MINUTE,ticket.getPrice());
+        assertEquals( Precision.round(24*60 * Fare.CAR_RATE_PER_MINUTE, 2), ticket.getPrice());
     }
     @Test
     @Tag("FeeCar")
@@ -212,7 +213,7 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFarCarRemise() throws Exception {
 
-        ticket.setVehicleRegNumber("abcde");
+
 
         //when(ticketDAO.getTicket(vehicleRegNumber)).thenReturn(ticket);
         //doReturn(true).when(ticketDAO).checkByVehicleRegNumber(anyString());
@@ -220,15 +221,17 @@ public class FareCalculatorServiceTest {
         inTime.setTime( System.currentTimeMillis() - ( 60 * 60 * 1000) );
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+        ticket.setVehicleRegNumber("abcde");
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
 
-        //when(ticketDAO.checkByVehicleRegNumber(ticket.getVehicleRegNumber())).thenReturn(true);
+        when(ticketDAO.checkByVehicleRegNumber(ticket.getVehicleRegNumber())).thenReturn(true);
 
         fareCalculatorService.calculateFare(ticket);
 
         assertEquals(Precision.round(60 * Fare.CAR_RATE_PER_MINUTE * 0.95,2), ticket.getPrice());
+        verify(ticketDAO,times(1)).checkByVehicleRegNumber(anyString());
         //verify(ticketDAO).checkByVehicleRegNumber(vehicleRegNumber);
     }
 

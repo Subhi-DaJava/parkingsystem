@@ -16,8 +16,9 @@ public class FareCalculatorService {
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
         TicketDAO ticketDAO = new TicketDAO();
-        double inMinute = ticket.getInTime().getTime() / (1000 * 60 );
-        double outMinute =ticket.getOutTime().getTime() / (1000 * 60 );
+
+        double inMinute = (double) ticket.getInTime().getTime() / (1000 * 60 );
+        double outMinute =(double) ticket.getOutTime().getTime() / (1000 * 60 );
 
         double  duration = outMinute - inMinute;
         double discountRate = 1.0;
