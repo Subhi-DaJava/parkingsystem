@@ -89,7 +89,7 @@ public class TicketDAO {
      * @param  vehicleRegNumber check the vehicle is parked before or no.
      * @return true means,the vehicle has been parked once min.
      */
-    public boolean checkByVehicleRegNumber(String vehicleRegNumber){
+    public boolean isVehicleRecurrent(String vehicleRegNumber){
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
@@ -105,11 +105,11 @@ public class TicketDAO {
     }
 
     /**
-     * check vehicle is or is not in the parking.
-     * @param vehicleRegNumber
+     * Check vehicle is or is not in the parking.
+     * @param vehicleRegNumber given for checking,
      * @return true means the vehicle is here now.
      */
-    public boolean checkByVehicleRegNumberIfVehicleParkedOrNot(String vehicleRegNumber){
+    public boolean isVehicleAlreadyParked(String vehicleRegNumber){
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();

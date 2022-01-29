@@ -34,25 +34,26 @@ public class ParkingService {
             if(parkingSpot !=null && parkingSpot.getId() > 0){
 
                 String vehicleRegNumber = getVehicleRegNumber();
-                parkingSpot.setAvailable(false);
 
-                boolean isAlreadyParked = ticketDAO.checkByVehicleRegNumberIfVehicleParkedOrNot(vehicleRegNumber);
+
+                boolean isAlreadyParked = ticketDAO.isVehicleAlreadyParked(vehicleRegNumber);
                 if (isAlreadyParked) {
                     System.out.println("This vehicle, registration number " +vehicleRegNumber+" is parking now.\n");
                     return;
                 }
-
+                //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+                //ticket.setId(ticketID);
+                parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allow this parking space and mark its availability as false
                 Date inTime = new Date();
                 Ticket ticket = new Ticket();
-                //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-                //ticket.setId(ticketID);
+
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(0.0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
-                if(ticketDAO.checkByVehicleRegNumber(vehicleRegNumber)){
+                if(ticketDAO.isVehicleRecurrent(vehicleRegNumber)){
                     System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
                 }
                 ticketDAO.saveTicket(ticket);
@@ -131,7 +132,7 @@ public class ParkingService {
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
 
-            boolean isVehicleParked = ticketDAO.checkByVehicleRegNumberIfVehicleParkedOrNot(vehicleRegNumber);
+            boolean isVehicleParked = ticketDAO.isVehicleAlreadyParked(vehicleRegNumber);
             if(!isVehicleParked) {
                 System.out.println("This vehicle is not parked here yet.\n");
             return ;
@@ -141,11 +142,6 @@ public class ParkingService {
 
             fareCalculatorService.calculateFare(ticket);
             //Check if the vehicle is recurring or not and if it is, calcul the price with 5% discount
-            double discountRate = 0.05;
-            if(ticketDAO.checkByVehicleRegNumber(ticket.getVehicleRegNumber())){
-                double priceDiscount = Precision.round(ticket.getPrice() * (1-discountRate),2);
-                ticket.setPrice(priceDiscount);
-            }
 
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();

@@ -61,39 +61,27 @@ public class ParkingDataBaseIT {
         parkingService.processIncomingVehicle();
         //TODO: check that a ticket is actually saved in DB and Parking table is updated with availability
 
-        //verify(ticketDAO).getTicket("ABCDEF");
-        //assertEquals("ABCDEF",ticketDAO.getTicket("ABCDEF"));
-        //assertTrue(ticketDAO.getTicket("ABCDEF").getOutTime() == null);
-        //assertTrue(ticketDAO.getTicket("ABCDEF").getInTime() != null);
-        assertNull(ticketDAO.getTicket("ABCDEF").getOutTime());
-        assertNotNull(ticketDAO.getTicket("ABCDEF").getInTime());
+        Ticket ticket = ticketDAO.getTicket("ABCDEF");
+        assertNull(ticket.getOutTime());
+        assertNotNull(ticket.getInTime());
 
-        //assertTrue(parkingSpotDAO.updateParking(ticketDAO.getTicket("ABCEF").getParkingSpot()));
-        //j'ai vérifié la disponibilité de la deuxième spot pour que 1 est déjà occupé ??
         assertEquals(2,parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
-        assertEquals(0.0, ticketDAO.getTicket("ABCDEF").getPrice());
-
-        //verify(ticketDAO,times(1)).saveTicket(any(Ticket.class));
-        //when(parkingSpotDAO.updateParking(ticket.getParkingSpot())).thenReturn(true);
-        //assertEquals(true,parkingSpotDAO.updateParking(parkingSpot));
-        //assertEquals(true, ticketDAO.saveTicket(ticket));
-        //assertEquals(true, parkingSpotDAO.updateParking(any(ParkingSpot.class)));
+        assertEquals(0.0, ticket.getPrice());
+        assertEquals(1,ticket.getParkingSpot().getId());
 
     }
 
     @Test
     public void testParkingLotExit() throws Exception {
-        //testParkingACar(); test should be independent
+        //testParkingACar(); //test should be independent
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processIncomingVehicle();
+        //comment faire une durée d'une heure
         parkingService.processExitingVehicle();
         //when(ticketDAO.checkByVehicleRegNumberIfVehicleParkedOrNot("ABCDEF")).thenReturn(true);
         //TODO: check that the fare generated and out time are populated correctly in the database
-        //Ticket ticket = ticketDAO.getTicket("abcde")
-        //when(inputReaderUtil.readSelection()).thenReturn(2);
-        //verify(inputReaderUtil).readSelection();
-        //verify(inputReaderUtil).readVehicleRegistrationNumber();
-        assertNotEquals(ticketDAO.getTicket("ABCDEF").getPrice(),0.0);
-        //assertTrue(ticketDAO.getTicket("ABCDEF").getInTime() != null);
+        //je veux faire pour 1 heure
+        assertEquals(ticketDAO.getTicket("ABCDEF").getPrice(),0.0);
         assertNotNull(ticketDAO.getTicket("ABCDEF"));
     }
 
