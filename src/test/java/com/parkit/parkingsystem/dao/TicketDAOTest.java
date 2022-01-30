@@ -131,6 +131,7 @@ class TicketDAOTest {
         ticket.setParkingSpot(parkingSpot);
         parkingSpotDAO.updateParking(parkingSpot);
         ticketDAO.saveTicket(ticket);
+
         Ticket ticketNew = ticketDAO.getTicket(ticket.getVehicleRegNumber());
 
         assertEquals("Car",ticketNew.getVehicleRegNumber());

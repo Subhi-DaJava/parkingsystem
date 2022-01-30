@@ -6,7 +6,6 @@ import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
-import org.apache.commons.math3.util.Precision;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -57,7 +56,7 @@ public class FareCalculatorServiceTest {
 
         fareCalculatorService.calculateFare(ticket);
 
-        assertEquals( (double) 35/60 * Fare.CAR_RATE_PER_MINUTE, ticket.getPrice());
+        assertEquals( (double) 35/60 * Fare.CAR_RATE_PER_HOUR, ticket.getPrice());
     }
 
     @Test
@@ -76,7 +75,7 @@ public class FareCalculatorServiceTest {
 
         fareCalculatorService.calculateFare(ticket);
 
-        assertThat( (double) 35/60 * Fare.BIKE_RATE_PER_MINUTE).isEqualTo(ticket.getPrice());
+        assertThat( (double) 35/60 * Fare.BIKE_RATE_PER_HOUR).isEqualTo(ticket.getPrice());
     }
 
     @Test
@@ -125,7 +124,7 @@ public class FareCalculatorServiceTest {
 
         fareCalculatorService.calculateFare(ticket);
 
-        assertThat(0.75 * Fare.BIKE_RATE_PER_MINUTE).isEqualTo(ticket.getPrice());
+        assertThat(0.75 * Fare.BIKE_RATE_PER_HOUR).isEqualTo(ticket.getPrice());
     }
 
     @Test
@@ -143,7 +142,7 @@ public class FareCalculatorServiceTest {
         fareCalculatorService.setTicketDAO(ticketDAO);
         fareCalculatorService.calculateFare(ticket);
 
-        assertEquals( 0.75 * Fare.CAR_RATE_PER_MINUTE,ticket.getPrice());
+        assertEquals( 0.75 * Fare.CAR_RATE_PER_HOUR,ticket.getPrice());
     }
 
     @Test
@@ -163,7 +162,7 @@ public class FareCalculatorServiceTest {
 
         fareCalculatorService.calculateFare(ticket);
 
-        assertEquals( 24 * Fare.CAR_RATE_PER_MINUTE, ticket.getPrice());
+        assertEquals( 24 * Fare.CAR_RATE_PER_HOUR, ticket.getPrice());
     }
     @Test
     @Tag("FeeCar")
@@ -266,7 +265,7 @@ public class FareCalculatorServiceTest {
 
         fareCalculatorService.calculateFare(ticket);
 
-        assertEquals( Fare.CAR_RATE_PER_MINUTE * 0.95, ticket.getPrice());
+        assertEquals( Fare.CAR_RATE_PER_HOUR * 0.95, ticket.getPrice());
         verify(ticketDAO, Mockito.times(1)).isVehicleRecurrent(ticket.getVehicleRegNumber());
 
     }
@@ -288,7 +287,7 @@ public class FareCalculatorServiceTest {
 
         fareCalculatorService.calculateFare(ticket);
 
-        assertEquals(Fare.BIKE_RATE_PER_MINUTE * 0.95, ticket.getPrice());
+        assertEquals(Fare.BIKE_RATE_PER_HOUR * 0.95, ticket.getPrice());
         verify(ticketDAO, Mockito.times(1)).isVehicleRecurrent(ticket.getVehicleRegNumber());
 
     }

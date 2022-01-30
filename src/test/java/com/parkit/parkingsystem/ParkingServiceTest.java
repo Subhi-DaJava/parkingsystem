@@ -71,11 +71,10 @@ public class ParkingServiceTest {
 
     //TODO est-ce qu'on fait ce test dessous et d'autres encore comme getNextParkingNumberIfAvailable(), getVehicleType()?
     @Test
-    @Disabled
     public void processIncomingVehicleTest(){
-        /*processIncomingVehicleTest();
-        assertEquals(ticketDAO.getTicket(anyString()).getParkingSpot().isAvailable(), false);
-*/
+        parkingService.processExitingVehicle();
+        verify(parkingSpotDAO).updateParking(any(ParkingSpot.class));
+
     }
 
 
