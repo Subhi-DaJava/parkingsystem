@@ -8,7 +8,6 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.commons.math3.util.Precision;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +24,6 @@ import static org.mockito.Mockito.*;
 public class ParkingServiceTest {
 
     private static ParkingService parkingService;
-
     @Mock
     private static InputReaderUtil inputReaderUtil;
     @Mock
@@ -95,6 +93,7 @@ public class ParkingServiceTest {
 
     }
     @Test
+    @Disabled
     public void processIncomingVehicleNoPlaceInTheParkingTest() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
@@ -106,11 +105,6 @@ public class ParkingServiceTest {
         verify(parkingSpotDAO,never()).updateParking(any(ParkingSpot.class));
         verify(ticketDAO,times(0)).saveTicket(any(Ticket.class));
     }
-
-
-
-
-
 
 
 }
