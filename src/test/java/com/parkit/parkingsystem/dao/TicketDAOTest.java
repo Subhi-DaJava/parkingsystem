@@ -83,42 +83,62 @@ class TicketDAOTest {
 
     }
     @Test
-    void saveTicketForCarIsEnteringInTheParking() {
+    void saveTicketForCarEnteringInTheParking() {
 
         Ticket ticket = new Ticket();
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis());
         ticket.setVehicleRegNumber("Car");
         ticket.setInTime(inTime);
-        ParkingSpot parkingSpot = new ParkingSpot(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR),ParkingType.CAR,false);
+        ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.CAR,false);
         ticket.setParkingSpot(parkingSpot);
-        parkingSpotDAO.updateParking(parkingSpot);
+
         ticketDAO.saveTicket(ticket);
 
+        //assertEquals(true,ticketDAO.saveTicket(ticket););
         assertNull(ticketDAO.getTicket("Car").getOutTime());
         assertEquals(0.0,ticketDAO.getTicket("Car").getPrice());
         assertTrue(parkingSpotDAO.updateParking(parkingSpot));
+        assertEquals(1,ticketDAO.getTicket("CAR").getParkingSpot().getId());
+
     }
 
     @Test
-    void saveTicketForBikeIsEnteringInTheParking() {
+    void saveTicketForBikeEnteringInTheParking() {
 
         Ticket ticket = new Ticket();
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis());
         ticket.setVehicleRegNumber("Bike");
-        ticket.setId(1);
         ticket.setInTime(inTime);
-        ParkingSpot parkingSpot = new ParkingSpot(parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE), ParkingType.BIKE, false);
+        ParkingSpot parkingSpot = new ParkingSpot(4, ParkingType.BIKE, false);
         ticket.setParkingSpot(parkingSpot);
-        parkingSpotDAO.updateParking(parkingSpot);
+
         ticketDAO.saveTicket(ticket);
 
         assertNull(ticketDAO.getTicket("Bike").getOutTime());
         assertEquals(0.0, ticketDAO.getTicket("Bike").getPrice());
         assertTrue(parkingSpotDAO.updateParking(parkingSpot));
+        //assertTrue(ticketDAO.saveTicket(ticket));
 
     }
+
+    @Test
+    void saveTicketFailureForCarEnteringInTheParking() {
+
+        Ticket ticket = new Ticket();
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis());
+        ticket.setVehicleRegNumber("Car");
+        ticket.setInTime(inTime);
+        ParkingSpot parkingSpot = new ParkingSpot(0,ParkingType.CAR,false);
+        ticket.setParkingSpot(parkingSpot);
+        ticketDAO.saveTicket(ticket);
+
+        assertFalse(ticketDAO.saveTicket(ticket));
+    }
+
+
     @Test
     void getTicketForCar() {
         Ticket ticket = new Ticket();
@@ -127,9 +147,9 @@ class TicketDAOTest {
         ticket.setVehicleRegNumber("Car");
         ticket.setId(1);
         ticket.setInTime(inTime);
-        ParkingSpot parkingSpot = new ParkingSpot(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR),ParkingType.CAR,false);
+        ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.CAR,false);
         ticket.setParkingSpot(parkingSpot);
-        parkingSpotDAO.updateParking(parkingSpot);
+
         ticketDAO.saveTicket(ticket);
 
         Ticket ticketNew = ticketDAO.getTicket(ticket.getVehicleRegNumber());
@@ -147,12 +167,11 @@ class TicketDAOTest {
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis());
         ticket.setVehicleRegNumber("Bike");
-        ticket.setId(1);
         ticket.setInTime(inTime);
-        ParkingSpot parkingSpot = new ParkingSpot(parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE),ParkingType.BIKE,false);
+        ParkingSpot parkingSpot = new ParkingSpot(4,ParkingType.BIKE,false);
         ticket.setParkingSpot(parkingSpot);
-        parkingSpotDAO.updateParking(parkingSpot);
         ticketDAO.saveTicket(ticket);
+
         Ticket ticketNew = ticketDAO.getTicket(ticket.getVehicleRegNumber());
 
         assertEquals("Bike",ticketNew.getVehicleRegNumber());
@@ -168,22 +187,18 @@ class TicketDAOTest {
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis() - 60 * 60 * 1000);
         ticket.setVehicleRegNumber("Car");
-        ticket.setId(1);
         ticket.setInTime(inTime);
-        ParkingSpot parkingSpot = new ParkingSpot(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR),ParkingType.CAR,false);
+        ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.CAR,false);
         ticket.setParkingSpot(parkingSpot);
-        parkingSpotDAO.updateParking(parkingSpot);
-
         ticketDAO.saveTicket(ticket);
         Date outTime = new Date();
         ticket.setOutTime(outTime);
         ticket.setPrice(1.5);
-        ticket.setOutTime(outTime);
+
 
         ticketDAO.updateTicket(ticket);
 
-        assertEquals(1.5,ticketDAO.getTicket("CAR").getPrice());
-        assertNotNull(ticketDAO.getTicket("CAR").getOutTime());
+        assertTrue(ticketDAO.updateTicket(ticket));
     }
     @Test
     void updateTicketForBike() {
@@ -191,23 +206,54 @@ class TicketDAOTest {
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis() - 60 * 60 * 1000);
         ticket.setVehicleRegNumber("Bike");
-        ticket.setId(1);
         ticket.setInTime(inTime);
-        ParkingSpot parkingSpot = new ParkingSpot(parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE),ParkingType.BIKE,false);
+        ParkingSpot parkingSpot = new ParkingSpot(4,ParkingType.BIKE,false);
         ticket.setParkingSpot(parkingSpot);
-        parkingSpotDAO.updateParking(parkingSpot);
-
         ticketDAO.saveTicket(ticket);
         Date outTime = new Date();
         ticket.setOutTime(outTime);
         ticket.setPrice(1);
-        ticket.setOutTime(outTime);
+
 
         ticketDAO.updateTicket(ticket);
 
-        assertEquals(1,ticketDAO.getTicket("Bike").getPrice());
-        assertNotNull(ticketDAO.getTicket("Bike").getOutTime());
+        assertTrue(ticketDAO.updateTicket(ticket));
     }
+
+    @Test
+    void noUpdateTicketForCar() {
+        Ticket ticket = new Ticket();
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis() - 60 * 60 * 1000);
+        ticket.setVehicleRegNumber("Car");
+        ticket.setId(1);
+        ticket.setInTime(inTime);
+        ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.CAR,false);
+        ticket.setParkingSpot(parkingSpot);
+
+        ticketDAO.updateTicket(ticket);
+
+        assertFalse(ticketDAO.updateTicket(ticket));
+
+    }
+    @Test
+    void noUpdateTicketForBike() {
+        Ticket ticket = new Ticket();
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis() - 60 * 60 * 1000);
+        ticket.setVehicleRegNumber("Bike");
+        ticket.setId(1);
+        ticket.setInTime(inTime);
+        ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.BIKE,false);
+        ticket.setParkingSpot(parkingSpot);
+
+        ticketDAO.updateTicket(ticket);
+
+        assertFalse(ticketDAO.updateTicket(ticket));
+
+    }
+
+
 
     @Test
     void isTheBikeRecurrent() {
@@ -217,9 +263,9 @@ class TicketDAOTest {
         ticket.setVehicleRegNumber("Bike");
         ticket.setId(1);
         ticket.setInTime(inTime);
-        ParkingSpot parkingSpot = new ParkingSpot(parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE),ParkingType.BIKE,false);
+        ParkingSpot parkingSpot = new ParkingSpot(4,ParkingType.BIKE,false);
         ticket.setParkingSpot(parkingSpot);
-        parkingSpotDAO.updateParking(parkingSpot);
+
         ticketDAO.saveTicket(ticket);
 
         Date outTime = new Date();
@@ -228,9 +274,8 @@ class TicketDAOTest {
         ticket.setOutTime(outTime);
         ticketDAO.updateTicket(ticket);
 
-        ticketDAO.isVehicleRecurrent("BikeOne");
+        ticketDAO.isVehicleRecurrent("Bike");
 
-        assertNotEquals("BikeOne",ticketDAO.getTicket("Bike").getVehicleRegNumber());
         assertTrue(ticketDAO.getTicket("Bike").getPrice() > 0);
         assertNotNull(ticketDAO.getTicket("Bike").getOutTime());
 
@@ -244,9 +289,9 @@ class TicketDAOTest {
         ticket.setId(1);
         ticket.setInTime(inTime);
 
-        ParkingSpot parkingSpot = new ParkingSpot(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR),ParkingType.CAR,false);
+        ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.CAR,false);
         ticket.setParkingSpot(parkingSpot);
-        parkingSpotDAO.updateParking(parkingSpot);
+
         ticketDAO.saveTicket(ticket);
 
         Date outTime = new Date();
@@ -255,13 +300,50 @@ class TicketDAOTest {
         ticket.setOutTime(outTime);
         ticketDAO.updateTicket(ticket);
 
-        ticketDAO.isVehicleRecurrent("CarOne");
+        ticketDAO.isVehicleRecurrent("Car");
 
-        assertNotEquals("CarOne",ticketDAO.getTicket("Car").getVehicleRegNumber());
+        assertEquals("Car",ticketDAO.getTicket("Car").getVehicleRegNumber());
         assertTrue(ticketDAO.getTicket("Car").getPrice() > 0);
         assertNotNull(ticketDAO.getTicket("Car").getOutTime());
 
     }
+
+    @Test
+    void isTheVehicleBikeNotRecurrent() {
+
+        Ticket ticket = new Ticket();
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis() - 60 * 60 * 1000);
+        ticket.setVehicleRegNumber("Bike");
+        ticket.setId(1);
+        ticket.setInTime(inTime);
+        ParkingSpot parkingSpot = new ParkingSpot(4,ParkingType.BIKE,false);
+        ticket.setParkingSpot(parkingSpot);
+        ticketDAO.saveTicket(ticket);
+
+        boolean recurrent = ticketDAO.isVehicleRecurrent("Bike");
+
+        assertFalse(recurrent);
+    }
+
+    @Test
+    void isTheVehicleCarNotRecurrent() {
+
+        Ticket ticket = new Ticket();
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis() - 60 * 60 * 1000);
+        ticket.setVehicleRegNumber("Car");
+        ticket.setId(1);
+        ticket.setInTime(inTime);
+        ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.CAR,false);
+        ticket.setParkingSpot(parkingSpot);
+        ticketDAO.saveTicket(ticket);
+
+        boolean recurrent = ticketDAO.isVehicleRecurrent("Car");
+
+        assertFalse(recurrent);
+    }
+
 
     @Test
     void isTheCarAlreadyParked() {
@@ -270,9 +352,8 @@ class TicketDAOTest {
         inTime.setTime(System.currentTimeMillis()-60*60*1000);
         ticket.setVehicleRegNumber("Car");
         ticket.setInTime(inTime);
-        ParkingSpot parkingSpot = new ParkingSpot(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR),ParkingType.CAR,false);
+        ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.CAR,false);
         ticket.setParkingSpot(parkingSpot);
-        parkingSpotDAO.updateParking(parkingSpot);
         ticketDAO.saveTicket(ticket);
 
         ticketDAO.isVehicleAlreadyParked(ticket.getVehicleRegNumber());
@@ -287,9 +368,8 @@ class TicketDAOTest {
         inTime.setTime(System.currentTimeMillis()-60*60*1000);
         ticket.setVehicleRegNumber("Bike");
         ticket.setInTime(inTime);
-        ParkingSpot parkingSpot = new ParkingSpot(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR),ParkingType.CAR,false);
+        ParkingSpot parkingSpot = new ParkingSpot(4,ParkingType.CAR,false);
         ticket.setParkingSpot(parkingSpot);
-        parkingSpotDAO.updateParking(parkingSpot);
         ticketDAO.saveTicket(ticket);
 
         ticketDAO.isVehicleAlreadyParked(ticket.getVehicleRegNumber());
@@ -297,4 +377,41 @@ class TicketDAOTest {
         assertEquals("Bike",ticketDAO.getTicket("Bike").getVehicleRegNumber());
         assertThat(ticketDAO.getTicket(ticket.getVehicleRegNumber()).getInTime()).isNotNull();
     }
+
+    @Test
+    void isTheCarNotParkedYet() {
+        Ticket ticket = new Ticket();
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis()-60*60*1000);
+        ticket.setVehicleRegNumber("Car");
+        ticket.setInTime(inTime);
+        ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.CAR,false);
+        ticket.setParkingSpot(parkingSpot);
+
+        ticketDAO.saveTicket(ticket);
+
+        boolean carParked = ticketDAO.isVehicleAlreadyParked("Car1");
+
+        assertNotEquals("Car1",ticketDAO.getTicket("Car").getVehicleRegNumber());
+        assertFalse(carParked);
+    }
+
+    @Test
+    void isTheBikeNotParkedYet() {
+        Ticket ticket = new Ticket();
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis()-60*60*1000);
+        ticket.setVehicleRegNumber("Bike");
+        ticket.setInTime(inTime);
+        ParkingSpot parkingSpot = new ParkingSpot(4,ParkingType.BIKE,false);
+        ticket.setParkingSpot(parkingSpot);
+
+        ticketDAO.saveTicket(ticket);
+
+        boolean carParked = ticketDAO.isVehicleAlreadyParked("Bike1");
+
+        assertNotEquals("Bike1",ticketDAO.getTicket("Bike").getVehicleRegNumber());
+        assertFalse(carParked);
+    }
+
 }
