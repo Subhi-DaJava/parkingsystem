@@ -6,12 +6,21 @@ import java.util.Scanner;
 
 public class InputReaderUtil {
 
-    private static Scanner scan = new Scanner(System.in);
+    private Scanner scan;
+
+    public InputReaderUtil(){
+        this.scan = new Scanner(System.in);
+    }
+
+    public void setScan(Scanner scan) {
+        this.scan = scan;
+    }
+
     private static final Logger logger = LogManager.getLogger("InputReaderUtil");
 
     /**
      * méthode ferme la classe Scanner
-     * @throws Throwable
+     * @throws Throwable when this methode could not close the Scanner.classe
      */
     @Override
     protected void finalize() throws Throwable {

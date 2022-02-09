@@ -9,16 +9,13 @@ import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.commons.math3.util.Precision;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.SQLException;
 import java.util.Date;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
