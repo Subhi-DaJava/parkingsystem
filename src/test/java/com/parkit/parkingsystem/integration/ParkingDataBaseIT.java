@@ -78,7 +78,6 @@ public class ParkingDataBaseIT {
         parkingService.processIncomingVehicle();
         //comment faire une durée d'une heure
         parkingService.processExitingVehicle();
-        //when(ticketDAO.checkByVehicleRegNumberIfVehicleParkedOrNot("ABCDEF")).thenReturn(true);
         //TODO: check that the fare generated and out time are populated correctly in the database
         //je veux faire pour 1 heure
         assertEquals(ticketDAO.getTicket("ABCDEF").getPrice(),0.0);

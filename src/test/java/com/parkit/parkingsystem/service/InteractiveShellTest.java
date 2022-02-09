@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class InteractiveShellTest {
-    private InteractiveShell interactiveShell;
+    /*private InteractiveShell interactiveShell;*/
     private ParkingService parkingService;
 
     @Mock
@@ -27,23 +27,18 @@ class InteractiveShellTest {
     @Mock
     TicketDAO ticketDAO;
 
+
     @BeforeEach
     public void setUp(){
-        interactiveShell = new InteractiveShell(inputReaderUtil,parkingSpotDAO,ticketDAO,parkingService);
         parkingService = new ParkingService(inputReaderUtil,parkingSpotDAO,ticketDAO);
-
-        interactiveShell.setInputReaderUtil(inputReaderUtil);
-        interactiveShell.setParkingSpotDAO(parkingSpotDAO);
-        interactiveShell.setTicketDAO(ticketDAO);
-        interactiveShell.setParkingService(parkingService);
+        InteractiveShell.setInputReaderUtil(inputReaderUtil);
     }
 
     @Test
     void loadInterfaceForExistingSystemTest() throws Exception {
 
         when(inputReaderUtil.readSelection()).thenReturn(3);
-
-        interactiveShell.loadInterface();
+        InteractiveShell.loadInterface();
 
         verify(inputReaderUtil).readSelection();
         verify(ticketDAO,never()).getTicket(any());
@@ -54,31 +49,30 @@ class InteractiveShellTest {
     @Disabled
     void loadInterfaceForIncomingVehicle() throws Exception {
 
-
         when(inputReaderUtil.readSelection()).thenReturn(1);
-        //when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
-        //when(ticketDAO.updateTicket(any())).thenReturn(false);
-        //when(inputReaderUtil.readSelection()).thenReturn(3);
+        InteractiveShell.setInputReaderUtil(inputReaderUtil);
+        ParkingType parkingType = parkingService.getVehicleType();
+        //InteractiveShell.loadInterface();
+        when(inputReaderUtil.readSelection()).thenReturn(3);
+        InteractiveShell.loadInterface();
 
-        interactiveShell.loadInterface();
-
-        verify(inputReaderUtil,times(1)).readSelection();
+        verify(inputReaderUtil,times(2)).readSelection();
     }
 
     @Test
     @Disabled
     void loadInterfaceForExistingVehicle() throws Exception {
 
-
         when(inputReaderUtil.readSelection()).thenReturn(2);
 
         when(ticketDAO.isVehicleAlreadyParked(anyString())).thenReturn(true);
 
-        //when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
+
         //when(ticketDAO.updateTicket(any())).thenReturn(false);
         //when(inputReaderUtil.readSelection()).thenReturn(3);
 
-        interactiveShell.loadInterface();
+        InteractiveShell.loadInterface();
 
         verify(inputReaderUtil,times(1)).readSelection();
     }
@@ -89,7 +83,7 @@ class InteractiveShellTest {
     void loadInterfaceWrongEnter() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(4);
 
-        interactiveShell.loadInterface();
+        InteractiveShell.loadInterface();
 
         verify(inputReaderUtil, times(1)).readSelection();
         verify(ticketDAO,never()).getTicket(any());

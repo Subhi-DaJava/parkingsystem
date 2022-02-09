@@ -71,8 +71,7 @@
             <artifactId>commons-math3</artifactId>
             <version>3.6.1</version>
         </dependency>
-
-    </dependencies>
+        </dependencies>
 
     <build>
         <plugins>
@@ -80,6 +79,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
+
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -100,6 +100,7 @@
                         </configuration>
                     </execution>
                 </executions>
+
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -115,7 +116,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/*IT.java</exclude>
-                    </excludes>
+                        </excludes>
                 </configuration>
                 <executions>
                     <execution>
@@ -139,6 +140,16 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.7</version>
+                <configuration>
+                    <excludes>
+                        <exclude>com/parkit/parkingsystem/constants/DBConstants.class</exclude>
+                        <exclude>com/parkit/parkingsystem/constants/Fare.class</exclude>
+                        <exclude>com/parkit/parkingsystem/constants/ParkingType.class</exclude>
+                        <exclude>com/parkit/parkingsystem/model/Ticket.class</exclude>
+                        <exclude>com/parkit/parkingsystem/model/ParkingSpot.class</exclude>
+                        <exclude>com/parkit/parkingsystem/App.class</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -148,13 +159,14 @@
                     <execution>
                         <id>jacoco-report</id>
                         <!--<phase>prepare-package</phase>??-->
-                        <phase>prepare-package</phase>
-                        <!--<phase>test</phase>-->
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
+
+
             </plugin>
             <plugin> <!-- Rajout de Plug-in -->
                 <groupId>org.apache.maven.plugins</groupId>
@@ -169,6 +181,16 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>com/parkit/parkingsystem/constants/DBConstants.class</exclude>
+                        <exclude>com/parkit/parkingsystem/constants/Fare.class</exclude>
+                        <exclude>com/parkit/parkingsystem/constants/ParkingType.class</exclude>
+                        <exclude>com/parkit/parkingsystem/model/Ticket.class</exclude>
+                        <exclude>com/parkit/parkingsystem/model/ParkingSpot.class</exclude>
+                        <exclude>com/parkit/parkingsystem/App.class</exclude>
+                    </excludes>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <reports>
