@@ -73,7 +73,6 @@ public class ParkingServiceTest {
 
     }
 
-
     @Test
     public void processExitingVehicleCouldNotUpdateTicketTest() throws Exception {
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
@@ -156,7 +155,6 @@ public class ParkingServiceTest {
 
     @Test
     public void processIncomingVehicleAlreadyParkedTest() throws Exception {
-
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
@@ -172,10 +170,7 @@ public class ParkingServiceTest {
         verify(ticketDAO).isVehicleAlreadyParked(anyString());
     }
 
-
-
     @Test
-
     public void processIncomingVehicleNoPlaceInTheParkingTest() throws Exception {
 
         when(inputReaderUtil.readSelection()).thenReturn(1);
@@ -190,7 +185,6 @@ public class ParkingServiceTest {
 
     @Test
     public  void getNextParkingNumberIfAvailableTest(){
-
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
 
@@ -198,8 +192,6 @@ public class ParkingServiceTest {
 
         assertEquals(1, parkingSpotNumber);
     }
-
-
 
     @Test
     public  void wrongVehicleTypeThrowExceptionTest(){

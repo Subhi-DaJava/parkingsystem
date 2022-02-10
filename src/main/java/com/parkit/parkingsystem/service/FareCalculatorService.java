@@ -4,22 +4,17 @@ import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
 
-
 public class FareCalculatorService {
 
     private TicketDAO ticketDAO;
-
     public void setTicketDAO(TicketDAO ticketDAO) {
         this.ticketDAO = ticketDAO;
     }
-
     public FareCalculatorService() {
         this.ticketDAO = new TicketDAO();
     }
 
     public void calculateFare(Ticket ticket){
-
-
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
@@ -33,12 +28,10 @@ public class FareCalculatorService {
         if( duration <= 0.5 ) {
             duration = 0;
         }
-
         double discountRate = 1;
         if(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())){
             discountRate = 0.95;
         }
-
         switch (ticket.getParkingSpot().getParkingType()) {
             case CAR: {
                 fareByHour = Fare.CAR_RATE_PER_HOUR;
