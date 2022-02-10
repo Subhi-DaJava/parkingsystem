@@ -39,7 +39,7 @@ public class DataBaseConfig {
     }
 
     public void closeResultSet(ResultSet rs) {
-        if(rs!=null){
+        if(rs != null){
             try {
                 rs.close();
                 logger.info("Closing Result Set");

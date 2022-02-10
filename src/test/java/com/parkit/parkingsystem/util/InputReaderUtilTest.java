@@ -1,6 +1,5 @@
 package com.parkit.parkingsystem.util;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,13 +28,12 @@ class InputReaderUtilTest {
     }
 
     @Test
-    @Disabled
     public void readSelectionThrowsException(){
 
         inputReaderUtil.setScan(new Scanner("subh"));
 
-        assertThrows(NumberFormatException.class, ()-> inputReaderUtil.readSelection());
-        assertThrows(IllegalArgumentException.class,()-> inputReaderUtil.readSelection());
+        assertEquals(-1,inputReaderUtil.readSelection());
+
     }
 
 
@@ -50,17 +48,13 @@ class InputReaderUtilTest {
 
     }
     @Test
-    public void readVehicleRegistrationNumberNull() throws Exception {
+    public void readVehicleRegistrationNumberNull() {
 
         inputReaderUtil.setScan(new Scanner(" "));
 
         assertThrows(IllegalArgumentException.class,()-> inputReaderUtil.readVehicleRegistrationNumber());
 
-    }
-
-    @Test
-    @Disabled
-    protected void finalize() throws Throwable{
 
     }
+
 }

@@ -7,21 +7,24 @@ import org.apache.logging.log4j.Logger;
 
 public class InteractiveShell {
     private static final Logger logger = LogManager.getLogger("InteractiveShell");
-    private static InputReaderUtil inputReaderUtil = new InputReaderUtil();
-    private static  ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
-    private static  TicketDAO ticketDAO = new TicketDAO();
-    private static  ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-    public static void setInputReaderUtil(InputReaderUtil inputReaderUtil) {
-        InteractiveShell.inputReaderUtil = inputReaderUtil;
+    private InputReaderUtil inputReaderUtil ;
+    private  ParkingSpotDAO parkingSpotDAO ;
+    private  TicketDAO ticketDAO ;
+    private  ParkingService parkingService ;
+    public void setInputReaderUtil(InputReaderUtil inputReaderUtil) {
+        this.inputReaderUtil = inputReaderUtil;
+    }
+    public void setParkingService(ParkingService parkingService) {
+        this.parkingService = parkingService;
     }
     public InteractiveShell(){
-        InteractiveShell.inputReaderUtil = inputReaderUtil;
-        InteractiveShell.parkingSpotDAO = parkingSpotDAO;
-        InteractiveShell.ticketDAO = ticketDAO;
-        InteractiveShell.parkingService=parkingService;
+        this.inputReaderUtil =new InputReaderUtil();
+        this.parkingSpotDAO = new ParkingSpotDAO();
+        this.ticketDAO= new TicketDAO();
+        this.parkingService= new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
     }
 
-    public static void loadInterface() throws Exception {
+    public void loadInterface() {
         logger.info("App initialized!!!");
         System.out.println("Welcome to Parking System!");
 
