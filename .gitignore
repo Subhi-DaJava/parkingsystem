@@ -6,7 +6,8 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
-.idea/
+.idea/dataSources
+.idea/libraries/
 # Created by https://www.toptal.com/developers/gitignore/api/java,maven,intellij
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,maven,intellij
 
