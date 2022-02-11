@@ -11,6 +11,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.sql.SQLException;
 import java.util.Date;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -195,7 +197,6 @@ class TicketDAOTest {
         ticket.setOutTime(outTime);
         ticket.setPrice(1.5);
 
-
         ticketDAO.updateTicket(ticket);
 
         assertTrue(ticketDAO.updateTicket(ticket));
@@ -213,7 +214,6 @@ class TicketDAOTest {
         Date outTime = new Date();
         ticket.setOutTime(outTime);
         ticket.setPrice(1);
-
 
         ticketDAO.updateTicket(ticket);
 
@@ -265,9 +265,7 @@ class TicketDAOTest {
         ticket.setInTime(inTime);
         ParkingSpot parkingSpot = new ParkingSpot(4,ParkingType.BIKE,false);
         ticket.setParkingSpot(parkingSpot);
-
         ticketDAO.saveTicket(ticket);
-
         Date outTime = new Date();
         ticket.setOutTime(outTime);
         ticket.setPrice(1);
@@ -288,12 +286,9 @@ class TicketDAOTest {
         ticket.setVehicleRegNumber("Car");
         ticket.setId(1);
         ticket.setInTime(inTime);
-
         ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.CAR,false);
         ticket.setParkingSpot(parkingSpot);
-
         ticketDAO.saveTicket(ticket);
-
         Date outTime = new Date();
         ticket.setOutTime(outTime);
         ticket.setPrice(1.5);
@@ -310,7 +305,6 @@ class TicketDAOTest {
 
     @Test
     void isTheVehicleBikeNotRecurrent() {
-
         Ticket ticket = new Ticket();
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis() - 60 * 60 * 1000);
@@ -328,7 +322,6 @@ class TicketDAOTest {
 
     @Test
     void isTheVehicleCarNotRecurrent() {
-
         Ticket ticket = new Ticket();
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis() - 60 * 60 * 1000);
@@ -361,6 +354,7 @@ class TicketDAOTest {
         assertEquals("Car",ticketDAO.getTicket("Car").getVehicleRegNumber());
         assertThat(ticketDAO.getTicket(ticket.getVehicleRegNumber()).getOutTime()).isNull();
     }
+
     @Test
     void isTheBikeAlreadyParked() {
         Ticket ticket = new Ticket();
@@ -387,12 +381,12 @@ class TicketDAOTest {
         ticket.setInTime(inTime);
         ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.CAR,false);
         ticket.setParkingSpot(parkingSpot);
-
         ticketDAO.saveTicket(ticket);
 
         boolean carParked = ticketDAO.isVehicleAlreadyParked("Car1");
 
         assertNotEquals("Car1",ticketDAO.getTicket("Car").getVehicleRegNumber());
+        //Pour simplifier ce test, on peut tester directement cette méthode avec un null
         assertFalse(carParked);
     }
 
@@ -405,12 +399,12 @@ class TicketDAOTest {
         ticket.setInTime(inTime);
         ParkingSpot parkingSpot = new ParkingSpot(4,ParkingType.BIKE,false);
         ticket.setParkingSpot(parkingSpot);
-
         ticketDAO.saveTicket(ticket);
 
         boolean carParked = ticketDAO.isVehicleAlreadyParked("Bike1");
 
         assertNotEquals("Bike1",ticketDAO.getTicket("Bike").getVehicleRegNumber());
+        //Pour simplifier ce test, on peut tester directement cette méthode avec un null
         assertFalse(carParked);
     }
 

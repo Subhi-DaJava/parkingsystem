@@ -139,7 +139,6 @@ public class ParkingService {
             ticket.setOutTime(outTime);
 
             fareCalculatorService.calculateFare(ticket);
-            //Check if the vehicle is recurring or not and if it is, calcul the price with 5% discount
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);

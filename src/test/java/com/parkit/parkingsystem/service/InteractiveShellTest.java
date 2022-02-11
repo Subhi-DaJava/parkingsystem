@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.util.InputReaderUtil;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +23,10 @@ class InteractiveShellTest {
         interactiveShell = new InteractiveShell();
         interactiveShell.setInputReaderUtil(inputReaderUtil);
         interactiveShell.setParkingService(parkingService);
+    }
+    @AfterAll
+    private static void tearDown(){
+
     }
 
     @Test

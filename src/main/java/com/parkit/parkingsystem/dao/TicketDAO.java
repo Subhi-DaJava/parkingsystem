@@ -117,7 +117,6 @@ public class TicketDAO {
             ps.setString(1,vehicleRegNumber);
             return ps.executeQuery().next();
         }catch (Exception ex){
-
             logger.error("Error comparing ticket info",ex);
         }finally {
             dataBaseConfig.closeConnection(con);

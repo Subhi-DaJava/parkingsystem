@@ -18,6 +18,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -29,6 +31,7 @@ public class ParkingDataBaseIT {
     private static ParkingSpotDAO parkingSpotDAO;
     private static TicketDAO ticketDAO;
     private static DataBasePrepareService dataBasePrepareService;
+    private ParkingService parkingService;
 
     @Mock
     private static InputReaderUtil inputReaderUtil;
@@ -44,10 +47,11 @@ public class ParkingDataBaseIT {
 
     @BeforeEach
     private void setUpPerTest() throws Exception {
-        // changé ?
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         dataBasePrepareService.clearDataBaseEntries();
+        when(inputReaderUtil.readSelection()).thenReturn(1,2);
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
     }
 
     @AfterAll
@@ -57,29 +61,24 @@ public class ParkingDataBaseIT {
 
     @Test
     public void testParkingACar() throws Exception {
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
-        //TODO: check that a ticket is actually saved in DB and Parking table is updated with availability
 
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
+
         assertNull(ticket.getOutTime());
         assertNotNull(ticket.getInTime());
-
         assertEquals(2,parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
         assertEquals(0.0, ticket.getPrice());
         assertEquals(1,ticket.getParkingSpot().getId());
-
     }
 
     @Test
     public void testParkingLotExit() throws Exception {
-        //testParkingACar(); //test should be independent
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        ticketDAO.isVehicleAlreadyParked("ABCDEF");
         parkingService.processIncomingVehicle();
-        //comment faire une durée d'une heure
+
         parkingService.processExitingVehicle();
-        //TODO: check that the fare generated and out time are populated correctly in the database
-        //je veux faire pour 1 heure
+
         assertEquals(ticketDAO.getTicket("ABCDEF").getPrice(),0.0);
         assertNotNull(ticketDAO.getTicket("ABCDEF"));
     }
