@@ -41,6 +41,7 @@ public class ParkingServiceTest {
 
     @Test
     public void processExitingVehicleTest() throws Exception {
+        //GIVEN
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         ParkingSpot parkingSpot = new ParkingSpot(4, ParkingType.BIKE,false);
         Ticket ticket = new Ticket();
@@ -51,9 +52,9 @@ public class ParkingServiceTest {
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
         when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
         when(ticketDAO.isVehicleAlreadyParked("ABCDEF")).thenReturn(true);
-
+        //WHEN
         parkingService.processExitingVehicle();
-
+        //THEN
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
         verify(ticketDAO,times(1)).getTicket(anyString());
         verify(ticketDAO).isVehicleAlreadyParked(anyString());
@@ -63,16 +64,18 @@ public class ParkingServiceTest {
 
     @Test
     public void processExistingVehicleNotParkedTest() throws Exception {
+        //GIVEN
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(ticketDAO.isVehicleAlreadyParked("ABCDEF")).thenReturn(false);
-
+        //WHEN
         parkingService.processExitingVehicle();
-
+        //THEN
         assertNull(ticketDAO.getTicket("ABCDEF"));
     }
 
     @Test
     public void processExitingVehicleCouldNotUpdateTicketTest() throws Exception {
+        //GIVEN
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
         Ticket ticket = new Ticket();
@@ -82,9 +85,9 @@ public class ParkingServiceTest {
         when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
         when(ticketDAO.isVehicleAlreadyParked("ABCDEF")).thenReturn(true);
         when(ticketDAO.updateTicket(ticket)).thenReturn(false);
-
+        //WHEN
         parkingService.processExitingVehicle();
-
+        //THEN
         verify(parkingSpotDAO, Mockito.times(0)).updateParking(any(ParkingSpot.class));
         verify(ticketDAO,times(1)).getTicket(anyString());
         verify(ticketDAO,times(1)).updateTicket(any(Ticket.class));
@@ -95,6 +98,7 @@ public class ParkingServiceTest {
 
     @Test
     public void processExitingVehicleCouldNotBeProcessedTest() throws Exception {
+        //GIVEN
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
         Ticket ticket = new Ticket();
@@ -104,9 +108,9 @@ public class ParkingServiceTest {
         when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
         when(ticketDAO.isVehicleAlreadyParked("ABCDEF")).thenReturn(true);
         when(ticketDAO.updateTicket(ticket)).thenReturn(false);
-
+        //WHEN
         parkingService.processExitingVehicle();
-
+        //THEN
         verify(parkingSpotDAO, Mockito.times(0)).updateParking(any(ParkingSpot.class));
         verify(ticketDAO,times(1)).getTicket(anyString());
         verify(ticketDAO,times(1)).updateTicket(any(Ticket.class));
@@ -117,14 +121,15 @@ public class ParkingServiceTest {
 
     @Test
     public void processIncomingVehicleWithoutDiscountTest() throws Exception {
+        //GIVEN
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
         when(ticketDAO.isVehicleAlreadyParked("ABCDEF")).thenReturn(false);
         when(ticketDAO.isVehicleRecurrent("ABCDEF")).thenReturn(false);
-
+        //WHEN
         parkingService.processIncomingVehicle();
-
+        //THEN
         verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
         verify(ticketDAO,times(1)).saveTicket(any(Ticket.class));
         verify(parkingSpotDAO).getNextAvailableSlot(any(ParkingType.class));
@@ -134,14 +139,15 @@ public class ParkingServiceTest {
 
     @Test
     public void processIncomingVehicleWithDiscountTest() throws Exception {
+        //GIVEN
         when(inputReaderUtil.readSelection()).thenReturn(2);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE)).thenReturn(4);
         when(ticketDAO.isVehicleRecurrent("ABCDEF")).thenReturn(true);
         when(ticketDAO.isVehicleAlreadyParked("ABCDEF")).thenReturn(false);
-
+        //WHEN
         parkingService.processIncomingVehicle();
-
+        //THEN
         verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
         verify(ticketDAO,times(1)).saveTicket(any(Ticket.class));
         verify(parkingSpotDAO).getNextAvailableSlot(ParkingType.BIKE);
@@ -150,13 +156,14 @@ public class ParkingServiceTest {
 
     @Test
     public void processIncomingVehicleAlreadyParkedTest() throws Exception {
+        //GIVEN
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
         when(ticketDAO.isVehicleAlreadyParked("ABCDEF")).thenReturn(true);
-
+        //WHEN
         parkingService.processIncomingVehicle();
-
+        //THEN
         verify(parkingSpotDAO, times(0)).updateParking(any(ParkingSpot.class));
         verify(ticketDAO,times(0)).saveTicket(any(Ticket.class));
         verify(parkingSpotDAO).getNextAvailableSlot(any(ParkingType.class));
@@ -165,28 +172,31 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processIncomingVehicleNoPlaceInTheParkingTest() throws Exception {
-
+    public void processIncomingVehicleNoPlaceInTheParkingTest() {
+        //GIVEN
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
         ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
-
+        //THEN
         assertNull(parkingSpot);
     }
 
     @Test
     public  void getNextParkingNumberIfAvailableTest(){
+        //GIVEN
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
-
+        //WHEN
         int parkingSpotNumber = parkingService.getNextParkingNumberIfAvailable().getId();
-
+        //THEN
         assertEquals(1, parkingSpotNumber);
     }
 
     @Test
     public  void wrongVehicleTypeThrowExceptionTest(){
+        //GIVEN
         when(inputReaderUtil.readSelection()).thenReturn(3);
+        //THEN
         assertThrows(IllegalArgumentException.class, ()-> parkingService.getVehicleType());
     }
 

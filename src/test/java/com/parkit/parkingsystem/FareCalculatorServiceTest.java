@@ -43,6 +43,7 @@ public class FareCalculatorServiceTest {
     @Test
     @Tag("FeeCar")
     public void calculateFareCarWith35MinutesParkingTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - ( 35 * 60 * 1000 ) );
         Date outTime = new Date();
@@ -52,15 +53,16 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(false);
         fareCalculatorService.setTicketDAO(ticketDAO);
-
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
-
+        //THEN
         assertEquals( (double) 35/60 * Fare.CAR_RATE_PER_HOUR, ticket.getPrice());
     }
 
     @Test
     @Tag("FeeBike")
     public void calculateFareBikeWith35MinutesParkingTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - ( 35 * 60 * 1000 ) );
         Date outTime = new Date();
@@ -70,14 +72,15 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(false);
         fareCalculatorService.setTicketDAO(ticketDAO);
-
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
-
+        //THEN
         assertThat( (double) 35/60 * Fare.BIKE_RATE_PER_HOUR).isEqualTo(ticket.getPrice());
     }
     @Test
     @Tag("FeeForUnknownType")
     public void calculateFareUnknownType(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         Date outTime = new Date();
@@ -85,12 +88,13 @@ public class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-
+        //THEN
         assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
     @Test
     @Tag("FeeForUnknownType")
     public void calculateFareUnknownTypeWithFutureInTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );
         Date outTime = new Date();
@@ -105,127 +109,128 @@ public class FareCalculatorServiceTest {
     @Test
     @Tag("FeeForUnknownType")
     public void calculateFareParkingTypeNull(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, null,false);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-
+        //THEN
         assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
     @Test
     @Tag("FeeForUnknownType")
     public void calculateFareParkingTypeNullWithFutureInTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, null,false);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-
+        //WHEN
         assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
     @Test
     @Tag("FeeForUnknownType")
     public void calculateFareParkingTypeNullPakringSpotNumber0(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );
-
         ParkingSpot parkingSpot = new ParkingSpot(0, null,false);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(null);
         ticket.setParkingSpot(parkingSpot);
-
+        //THEN
         assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
     @Test
     @Tag("FeeBike")
     public void calculateFareBikeWithFutureInTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-
+        //THEN
         assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
     @Test
     @Tag("FeeCar")
     public void calculateFareCarWithFutureInTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-
+        //THEN
         assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
     @Test
     @Tag("FeeCar")
     public void calculateFareCarWithFutureInTimeAndNullOutTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(null);
         ticket.setParkingSpot(parkingSpot);
-
+        //THEN
         assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
     @Test
     @Tag("FeeBike")
     public void calculateFareBikeWithFutureInTimeAndNullOutTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
         ticket.setInTime(inTime);
         ticket.setOutTime(null);
         ticket.setParkingSpot(parkingSpot);
-
+        //THEN
         assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
     @Test
     @Tag("FeeBike")
     public void calculateFareBikeWith45MinutesParkingTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) ); //45 minutes parking time should give 3/4th parking fare
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(false);
         fareCalculatorService.setTicketDAO(ticketDAO);
-
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
-
+        //THEN
         assertThat(0.75 * Fare.BIKE_RATE_PER_HOUR).isEqualTo(ticket.getPrice());
     }
 
     @Test
     @Tag("FeeCar")
     public void calculateFareCarWith45MinutesParkingTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) ); //45 minutes parking time should give 3/4th parking fare
         Date outTime = new Date();
@@ -235,14 +240,16 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(false);
         fareCalculatorService.setTicketDAO(ticketDAO);
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
-
+        //THEN
         assertEquals( 0.75 * Fare.CAR_RATE_PER_HOUR,ticket.getPrice());
     }
 
     @Test
     @Tag("FeeCar")
     public void calculateFareCarWithADayParkingTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) ); //24 hours parking time should give 24 *60 parking fare per minute
         Date outTime = new Date();
@@ -250,99 +257,99 @@ public class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(false);
         fareCalculatorService.setTicketDAO(ticketDAO);
-
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
-
+        //THEN
         assertEquals( 24 * Fare.CAR_RATE_PER_HOUR, ticket.getPrice());
     }
     @Test
     @Tag("FeeCar")
     public void calculateFareCarWithLessThan30MinutesParkingTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  30 * 60 * 1000) ); //30 minutes parking time should give 0.0 parking fare
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(false);
         fareCalculatorService.setTicketDAO(ticketDAO);
-
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
-
+        //THEN
         assertEquals( 0.0,ticket.getPrice());
     }
     @Test
     @Tag("FeeCar")
     public void calculateFareCarWithLessThan15MinutesParkingTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  15 * 60 * 1000) ); //15 minutes parking time should give 0.0 parking fare
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(false);
         fareCalculatorService.setTicketDAO(ticketDAO);
-
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
+        //THEN
         assertEquals( 0.0, ticket.getPrice());
     }
     @Test
     @Tag("FeeBike")
     public void calculateFareBikeWithLessThan30MinutesParkingTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  30 * 60 * 1000) ); //30 minutes parking time should give 0.0 parking fare
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(false);
         fareCalculatorService.setTicketDAO(ticketDAO);
-
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
+        //THEN
         assertEquals( 0.0, ticket.getPrice());
     }
     @Test
     @Tag("Bike")
     public void calculateFareBikeWithLessThan15MinutesParkingTime(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  15 * 60 * 1000) ); //15 minutes parking time should give 0.0 parking fare
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(false);
         fareCalculatorService.setTicketDAO(ticketDAO);
-
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
+        //THEN
         assertEquals( 0.0, ticket.getPrice());
     }
 
-    //Test vérifier un véhicule est récurrent ou non
     @Test
-    public void verifyVehicleIsRecurring() throws Exception {
+    public void verifyVehicleIsRecurring() {
+        //GIVEN
         when(ticketDAO.isVehicleRecurrent(anyString())).thenReturn(true);
+        //WHEN
         ticketDAO.isVehicleRecurrent("abcde");
-
+        //THEN
         verify(ticketDAO,times(1)).isVehicleRecurrent(anyString());
     }
 
     @Test
-    public void calculateFarCarWithDiscount() throws Exception {
+    public void calculateFarCarWithDiscount() {
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - ( 60 * 60 * 1000) );
         Date outTime = new Date();
@@ -353,16 +360,17 @@ public class FareCalculatorServiceTest {
         ticket.setVehicleRegNumber("abcde");
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(true);
         fareCalculatorService.setTicketDAO(ticketDAO);
-
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
-
+        //THEN
         assertEquals( Fare.CAR_RATE_PER_HOUR * 0.95, ticket.getPrice());
         verify(ticketDAO, Mockito.times(1)).isVehicleRecurrent(ticket.getVehicleRegNumber());
 
     }
 
     @Test
-    public void calculateFarBikeWithDiscount() throws Exception {
+    public void calculateFarBikeWithDiscount() {
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - ( 60 * 60 * 1000) );
         Date outTime = new Date();
@@ -373,16 +381,17 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(true);
         fareCalculatorService.setTicketDAO(ticketDAO);
-
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
-
+        //THEN
         assertEquals(Fare.BIKE_RATE_PER_HOUR * 0.95, ticket.getPrice());
         verify(ticketDAO, Mockito.times(1)).isVehicleRecurrent(ticket.getVehicleRegNumber());
 
     }
 
     @Test
-    public void calculateFarBikeWithDiscountLessThan30Minute() throws Exception {
+    public void calculateFarBikeWithDiscountLessThan30Minute(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - ( 30 * 60 * 1000) );
         Date outTime = new Date();
@@ -393,16 +402,16 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(true);
         fareCalculatorService.setTicketDAO(ticketDAO);
-
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
-
+        //THEN
         assertEquals(0, ticket.getPrice());
-
         verify(ticketDAO, Mockito.times(1)).isVehicleRecurrent(ticket.getVehicleRegNumber());
 
     }
     @Test
-    public void calculateFarCarWithDiscountLessThan30Minute() throws Exception {
+    public void calculateFarCarWithDiscountLessThan30Minute(){
+        //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - ( 30 * 60 * 1000) );
         Date outTime = new Date();
@@ -413,17 +422,12 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         when(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber())).thenReturn(true);
         fareCalculatorService.setTicketDAO(ticketDAO);
-
+        //WHEN
         fareCalculatorService.calculateFare(ticket);
-
+        //THEN
         assertEquals(0, ticket.getPrice());
         verify(ticketDAO, Mockito.times(1)).isVehicleRecurrent(ticket.getVehicleRegNumber());
 
     }
-
-
-
-
-
 
 }

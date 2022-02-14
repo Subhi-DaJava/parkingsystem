@@ -11,6 +11,9 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tester les deux méthodes de la classe ParkingSpotDAO
+ */
 class ParkingSpotDAOTest {
 
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
@@ -20,12 +23,16 @@ class ParkingSpotDAOTest {
 
 
     @BeforeAll
-    private static void setUp() throws Exception{
-        parkingSpotDAO = new ParkingSpotDAO();
-        parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
-        ticketDAO = new TicketDAO();
-        ticketDAO.dataBaseConfig = dataBaseTestConfig;
-        dataBasePrepareService = new DataBasePrepareService();
+    private static void setUp() {
+       try {
+           parkingSpotDAO = new ParkingSpotDAO();
+           parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
+           ticketDAO = new TicketDAO();
+           ticketDAO.dataBaseConfig = dataBaseTestConfig;
+           dataBasePrepareService = new DataBasePrepareService();
+       }catch (Exception e){
+          e.printStackTrace();
+       }
     }
     @BeforeEach
     private void setUpPerTest(){
@@ -38,81 +45,84 @@ class ParkingSpotDAOTest {
 
     @Test
     void getNextAvailableSlotForCar() {
+        //GIVEN
         ParkingType parkingType =ParkingType.CAR;
-
+        //WHEN
         int parkingSpotNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
-
+        //THEN
         assertEquals(1,parkingSpotNumber);
 
     }
 
     @Test
     void getNextAvailableSlotForBike() {
+        //GIVEN
         ParkingType parkingType =ParkingType.BIKE;
+        //WHEN
         int parkingSpotNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
-
+        //THEN
         assertEquals(4,parkingSpotNumber);
 
     }
 
     @Test
+    void getNextAvailableSlotForUnknownType() {
+        //GIVEN
+        ParkingType parkingType =ParkingType.UNKNOWN;
+        //WHEN
+        int parkingSpotNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
+        //THEN
+        assertNotEquals(1,parkingSpotNumber);
+    }
+
+    @Test
     void getNextAvailableSlotNotDisponibleForCar() {
+        //GIVEN
         ParkingType parkingType = ParkingType.CAR;
         ParkingSpot parkingSpot = new ParkingSpot(1,parkingType,false);
         parkingSpotDAO.updateParking(parkingSpot);
-
+        //WHEN
         int parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
-
+        //THEN
         assertNotEquals(1,parkingNumber);
-
     }
     @Test
     void getNextAvailableSlotNotDisponibleForBike() {
+        //GIVEN
         ParkingType parkingType = ParkingType.BIKE;
         ParkingSpot parkingSpot = new ParkingSpot(4,parkingType,false);
         parkingSpotDAO.updateParking(parkingSpot);
-
+        //WHEN
         int parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
-
+        //THEN
         assertNotEquals(4,parkingNumber);
 
     }
 
-
     @Test
     void updateParkingForCar() {
+        //GIVEN
         ParkingType parkingType =ParkingType.CAR;
-        ParkingSpot parkingSpot = new ParkingSpot(2,ParkingType.CAR,false);
-        Ticket ticket = new Ticket();
-        Date inTime = new Date();
-        inTime.setTime(System.currentTimeMillis() - ( 60 * 60 * 1000) );
-        ticket.setVehicleRegNumber("Car");
-        ticket.setInTime(inTime);
-
+        ParkingSpot parkingSpot;
+        int number = parkingSpotDAO.getNextAvailableSlot(parkingType);
+        parkingSpot = new ParkingSpot(3,parkingType,false);
+        //WHEN
         parkingSpotDAO.updateParking(parkingSpot);
-        ticket.setParkingSpot(parkingSpot);
-        ticketDAO.saveTicket(ticket);
-
-        assertEquals(2,ticketDAO.getTicket(ticket.getVehicleRegNumber()).getParkingSpot().getId());
-        assertNotEquals(true,ticketDAO.getTicket(ticket.getVehicleRegNumber()).getParkingSpot().isAvailable());
+        //THEN
+        assertEquals(3,parkingSpot.getId());
+        assertEquals(1,number);
     }
     @Test
     void updateParkingForBike() {
+        //GIVEN
         ParkingType parkingType =ParkingType.BIKE;
-        ParkingSpot parkingSpot = new ParkingSpot(5,ParkingType.BIKE,false);
-        Ticket ticket = new Ticket();
-        Date inTime = new Date();
-        inTime.setTime(System.currentTimeMillis() - ( 60 * 60 * 1000) );
-        ticket.setVehicleRegNumber("Bike");
-        ticket.setInTime(inTime);
-
+        ParkingSpot parkingSpot = new ParkingSpot(5,parkingType,false);
+        int number = parkingSpotDAO.getNextAvailableSlot(parkingType);
+        //WHEN
         parkingSpotDAO.updateParking(parkingSpot);
-        ticket.setParkingSpot(parkingSpot);
-        ticketDAO.saveTicket(ticket);
-
-        assertEquals(5,ticketDAO.getTicket(ticket.getVehicleRegNumber()).getParkingSpot().getId());
-        assertNotEquals(true,ticketDAO.getTicket(ticket.getVehicleRegNumber()).getParkingSpot().isAvailable());
-        assertEquals(parkingType.BIKE,ticketDAO.getTicket(ticket.getVehicleRegNumber()).getParkingSpot().getParkingType());
+        //THEN
+        assertEquals(5,parkingSpot.getId());
+        assertEquals(4,number);
     }
 
 }

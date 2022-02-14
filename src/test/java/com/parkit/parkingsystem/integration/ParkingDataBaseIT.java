@@ -37,12 +37,16 @@ public class ParkingDataBaseIT {
     private static InputReaderUtil inputReaderUtil;
 
     @BeforeAll
-    private static void setUp() throws Exception{
-        parkingSpotDAO = new ParkingSpotDAO();
-        parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
-        ticketDAO = new TicketDAO();
-        ticketDAO.dataBaseConfig = dataBaseTestConfig;
-        dataBasePrepareService = new DataBasePrepareService();
+    private static void setUp() {
+        try {
+            parkingSpotDAO = new ParkingSpotDAO();
+            parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
+            ticketDAO = new TicketDAO();
+            ticketDAO.dataBaseConfig = dataBaseTestConfig;
+            dataBasePrepareService = new DataBasePrepareService();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @BeforeEach
@@ -51,7 +55,6 @@ public class ParkingDataBaseIT {
         when(inputReaderUtil.readSelection()).thenReturn(1,2);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
     }
 
     @AfterAll
@@ -60,7 +63,8 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingACar() throws Exception {
+    public void testParkingACar(){
+
         parkingService.processIncomingVehicle();
 
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
@@ -73,7 +77,7 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingLotExit() throws Exception {
+    public void testParkingLotExit() {
         ticketDAO.isVehicleAlreadyParked("ABCDEF");
         parkingService.processIncomingVehicle();
 

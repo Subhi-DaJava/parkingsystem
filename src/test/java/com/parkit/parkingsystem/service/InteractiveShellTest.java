@@ -31,7 +31,9 @@ class InteractiveShellTest {
 
     @Test
     void loadInterfaceForExistingSystemTest(){
+
         when(inputReaderUtil.readSelection()).thenReturn(3);
+
         interactiveShell.loadInterface();
 
         verify(inputReaderUtil).readSelection();
