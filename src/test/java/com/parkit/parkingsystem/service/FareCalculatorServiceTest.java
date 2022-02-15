@@ -1,11 +1,10 @@
-package com.parkit.parkingsystem;
+package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,8 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import java.util.Date;
 
-@Tag("FareCalculationTest")
-@DisplayName("Calculer les fees de Car et Bike.")
 @ExtendWith(MockitoExtension.class)
 public class FareCalculatorServiceTest {
 
@@ -41,7 +38,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @Tag("FeeCar")
     public void calculateFareCarWith35MinutesParkingTime(){
         //GIVEN
         Date inTime = new Date();
@@ -60,7 +56,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @Tag("FeeBike")
     public void calculateFareBikeWith35MinutesParkingTime(){
         //GIVEN
         Date inTime = new Date();
@@ -78,7 +73,6 @@ public class FareCalculatorServiceTest {
         assertThat( (double) 35/60 * Fare.BIKE_RATE_PER_HOUR).isEqualTo(ticket.getPrice());
     }
     @Test
-    @Tag("FeeForUnknownType")
     public void calculateFareUnknownType(){
         //GIVEN
         Date inTime = new Date();
@@ -92,7 +86,6 @@ public class FareCalculatorServiceTest {
         assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
     @Test
-    @Tag("FeeForUnknownType")
     public void calculateFareUnknownTypeWithFutureInTime(){
         //GIVEN
         Date inTime = new Date();
@@ -107,7 +100,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @Tag("FeeForUnknownType")
     public void calculateFareParkingTypeNull(){
         //GIVEN
         Date inTime = new Date();
@@ -122,7 +114,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @Tag("FeeForUnknownType")
     public void calculateFareParkingTypeNullWithFutureInTime(){
         //GIVEN
         Date inTime = new Date();
@@ -137,7 +128,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @Tag("FeeForUnknownType")
     public void calculateFareParkingTypeNullPakringSpotNumber0(){
         //GIVEN
         Date inTime = new Date();
@@ -151,7 +141,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @Tag("FeeBike")
     public void calculateFareBikeWithFutureInTime(){
         //GIVEN
         Date inTime = new Date();
@@ -166,7 +155,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @Tag("FeeCar")
     public void calculateFareCarWithFutureInTime(){
         //GIVEN
         Date inTime = new Date();
@@ -181,7 +169,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @Tag("FeeCar")
     public void calculateFareCarWithFutureInTimeAndNullOutTime(){
         //GIVEN
         Date inTime = new Date();
@@ -195,7 +182,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @Tag("FeeBike")
     public void calculateFareBikeWithFutureInTimeAndNullOutTime(){
         //GIVEN
         Date inTime = new Date();
@@ -209,7 +195,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @Tag("FeeBike")
     public void calculateFareBikeWith45MinutesParkingTime(){
         //GIVEN
         Date inTime = new Date();
@@ -228,7 +213,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @Tag("FeeCar")
     public void calculateFareCarWith45MinutesParkingTime(){
         //GIVEN
         Date inTime = new Date();
@@ -247,7 +231,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    @Tag("FeeCar")
     public void calculateFareCarWithADayParkingTime(){
         //GIVEN
         Date inTime = new Date();
@@ -265,7 +248,6 @@ public class FareCalculatorServiceTest {
         assertEquals( 24 * Fare.CAR_RATE_PER_HOUR, ticket.getPrice());
     }
     @Test
-    @Tag("FeeCar")
     public void calculateFareCarWithLessThan30MinutesParkingTime(){
         //GIVEN
         Date inTime = new Date();
@@ -283,7 +265,6 @@ public class FareCalculatorServiceTest {
         assertEquals( 0.0,ticket.getPrice());
     }
     @Test
-    @Tag("FeeCar")
     public void calculateFareCarWithLessThan15MinutesParkingTime(){
         //GIVEN
         Date inTime = new Date();
@@ -301,7 +282,6 @@ public class FareCalculatorServiceTest {
         assertEquals( 0.0, ticket.getPrice());
     }
     @Test
-    @Tag("FeeBike")
     public void calculateFareBikeWithLessThan30MinutesParkingTime(){
         //GIVEN
         Date inTime = new Date();
@@ -319,7 +299,6 @@ public class FareCalculatorServiceTest {
         assertEquals( 0.0, ticket.getPrice());
     }
     @Test
-    @Tag("Bike")
     public void calculateFareBikeWithLessThan15MinutesParkingTime(){
         //GIVEN
         Date inTime = new Date();
@@ -429,5 +408,4 @@ public class FareCalculatorServiceTest {
         verify(ticketDAO, Mockito.times(1)).isVehicleRecurrent(ticket.getVehicleRegNumber());
 
     }
-
 }

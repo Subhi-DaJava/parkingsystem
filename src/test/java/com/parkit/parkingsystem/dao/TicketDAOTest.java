@@ -139,7 +139,6 @@ class TicketDAOTest {
         assertFalse(ticketDAO.saveTicket(ticket));
     }
 
-
     @Test
     void getTicketForCar() {
         //GIVEN
@@ -256,8 +255,6 @@ class TicketDAOTest {
         assertFalse(ticketDAO.updateTicket(ticket));
 
     }
-
-
 
     @Test
     void isTheBikeRecurrent() {

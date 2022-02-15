@@ -7,22 +7,13 @@ public class InputReaderUtil {
 
     private Scanner scan;
     public InputReaderUtil(){
-        this.scan = new Scanner(System.in);
+        this.scan = new Scanner(System.in,"UTF-8");
     }
     public void setScan(Scanner scan) {
         this.scan = scan;
     }
     private static final Logger logger = LogManager.getLogger("InputReaderUtil");
 
-    /**
-     * méthode ferme la classe Scanner
-     * @throws Throwable when this methode could not close the Scanner.classe
-     */
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        scan.close();
-    }
 
     public int readSelection() {
         try {
@@ -34,7 +25,7 @@ public class InputReaderUtil {
         }
     }
 
-    public String readVehicleRegistrationNumber() throws Exception {
+    public String readVehicleRegistrationNumber() {
         try {
             String vehicleRegNumber= scan.nextLine();
             if(vehicleRegNumber == null || vehicleRegNumber.trim().length()==0 ) {

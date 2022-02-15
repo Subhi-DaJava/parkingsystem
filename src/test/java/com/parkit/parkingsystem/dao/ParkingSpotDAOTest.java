@@ -1,14 +1,9 @@
 package com.parkit.parkingsystem.dao;
-
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.ParkingSpot;
-import com.parkit.parkingsystem.model.Ticket;
 import org.junit.jupiter.api.*;
-
-import java.util.Date;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

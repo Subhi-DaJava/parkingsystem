@@ -1,4 +1,4 @@
-package com.parkit.parkingsystem;
+package com.parkit.parkingsystem.service;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -40,7 +40,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processExitingVehicleTest() throws Exception {
+    public void processExitingVehicleTest() {
         //GIVEN
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         ParkingSpot parkingSpot = new ParkingSpot(4, ParkingType.BIKE,false);
@@ -63,7 +63,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processExistingVehicleNotParkedTest() throws Exception {
+    public void processExistingVehicleNotParkedTest() {
         //GIVEN
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(ticketDAO.isVehicleAlreadyParked("ABCDEF")).thenReturn(false);
@@ -74,7 +74,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processExitingVehicleCouldNotUpdateTicketTest() throws Exception {
+    public void processExitingVehicleCouldNotUpdateTicketTest() {
         //GIVEN
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
@@ -97,7 +97,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processExitingVehicleCouldNotBeProcessedTest() throws Exception {
+    public void processExitingVehicleCouldNotBeProcessedTest() {
         //GIVEN
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
@@ -120,7 +120,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processIncomingVehicleWithoutDiscountTest() throws Exception {
+    public void processIncomingVehicleWithoutDiscountTest() {
         //GIVEN
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(inputReaderUtil.readSelection()).thenReturn(1);
@@ -138,7 +138,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processIncomingVehicleWithDiscountTest() throws Exception {
+    public void processIncomingVehicleWithDiscountTest() {
         //GIVEN
         when(inputReaderUtil.readSelection()).thenReturn(2);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
@@ -155,7 +155,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processIncomingVehicleAlreadyParkedTest() throws Exception {
+    public void processIncomingVehicleAlreadyParkedTest() {
         //GIVEN
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
