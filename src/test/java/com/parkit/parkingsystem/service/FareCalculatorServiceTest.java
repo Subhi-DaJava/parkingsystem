@@ -192,6 +192,7 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         //THEN
         assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
+
     }
 
     @Test

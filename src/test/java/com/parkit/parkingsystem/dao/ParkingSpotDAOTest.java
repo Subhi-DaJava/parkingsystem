@@ -85,12 +85,15 @@ class ParkingSpotDAOTest {
     void getNextAvailableSlotNotDisponibleForBike() {
         //GIVEN
         ParkingType parkingType = ParkingType.BIKE;
-        ParkingSpot parkingSpot = new ParkingSpot(4,parkingType,false);
-        parkingSpotDAO.updateParking(parkingSpot);
+        ParkingSpot parkingSpot1 = new ParkingSpot(4,parkingType,false);
+        ParkingSpot parkingSpot2 = new ParkingSpot(5,parkingType,false);
+
+        parkingSpotDAO.updateParking(parkingSpot1);
+        parkingSpotDAO.updateParking(parkingSpot2);
         //WHEN
         int parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
         //THEN
-        assertNotEquals(4,parkingNumber);
+        assertEquals(0,parkingNumber);
 
     }
 

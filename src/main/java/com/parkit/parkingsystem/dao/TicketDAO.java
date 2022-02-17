@@ -100,7 +100,7 @@ public class TicketDAO {
         PreparedStatement ps = null;
         try {
             con = dataBaseConfig.getConnection();
-            ps = con.prepareStatement(DBConstants.VERIFY_REG_NUMBER);
+            ps = con.prepareStatement(DBConstants.VEHICLE_RECURRENT);
             ps.setString(1,vehicleRegNumber);
             return ps.executeQuery().next();
         }catch (Exception ex){
@@ -122,7 +122,7 @@ public class TicketDAO {
         PreparedStatement ps = null;
         try {
             con = dataBaseConfig.getConnection();
-            ps = con.prepareStatement(DBConstants.COUNT_TICKET);
+            ps = con.prepareStatement(DBConstants.CHECK_VEHICLE_PARKING);
             ps.setString(1,vehicleRegNumber);
             return ps.executeQuery().next();
         }catch (Exception ex){
@@ -133,7 +133,5 @@ public class TicketDAO {
         }
         return false;
     }
-
-
 
 }

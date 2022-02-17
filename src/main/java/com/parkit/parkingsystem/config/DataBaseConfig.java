@@ -1,11 +1,8 @@
 package com.parkit.parkingsystem.config;
-
-import com.parkit.parkingsystem.constants.DBConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
@@ -25,7 +22,7 @@ public class DataBaseConfig {
         String root = properties.getProperty("user");
         String password = properties.getProperty("password");
 
-        return DriverManager.getConnection(url,root,password);
+        return DriverManager.getConnection(url, root, password);
     }
 
     public void closeConnection(Connection con){
