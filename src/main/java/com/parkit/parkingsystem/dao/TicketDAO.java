@@ -10,12 +10,23 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 
+/**
+ * @author Tek and Subhi
+ * Five methods :for saving a ticket in the table ticket, getting the ticket, updating the ticket, checking a vehicle is recurrent or not
+ * and checking the vehicle is actually parked in the parking or not
+ */
 public class TicketDAO {
 
     private static final Logger logger = LogManager.getLogger("TicketDAO");
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
+    /**
+     *
+     * @param ticket
+     * @return true (saved) or false(not saved)
+     * Sending the query for save a ticket in the ticket table in DB
+     */
     public boolean saveTicket(Ticket ticket){
         Connection con = null;
         PreparedStatement ps = null;
@@ -39,6 +50,13 @@ public class TicketDAO {
         return false;
     }
 
+    /**
+     *
+     * Sending the query for setting the information of ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME
+     * in the table ticket
+     * @param vehicleRegNumber
+     * @return ticket (if it existes) null (no ticket)
+     */
     public Ticket getTicket(String vehicleRegNumber) {
         Connection con = null;
         Ticket ticket = null;
@@ -47,7 +65,7 @@ public class TicketDAO {
         try {
             con = dataBaseConfig.getConnection();
             ps = con.prepareStatement(DBConstants.GET_TICKET);
-            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+            //(ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setString(1,vehicleRegNumber);
             rs = ps.executeQuery();
             if(rs.next()){
@@ -70,6 +88,12 @@ public class TicketDAO {
         return ticket;
     }
 
+    /**
+     *
+     * Sending the query for updating the table ticket when the PRICE and the OUT_TIME change(a vehicle exit)
+     * @param ticket
+     * @return true(get updated) or false (not updated)
+     */
     public boolean updateTicket(Ticket ticket) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -94,6 +118,7 @@ public class TicketDAO {
      * Methode verify the vehicle recurrent in the parking
      * @param  vehicleRegNumber check the vehicle is parked before or no.
      * @return true means,the vehicle has been parked once min.
+     * @author Subhi
      */
     public boolean isVehicleRecurrent(String vehicleRegNumber){
         Connection con = null;
@@ -116,6 +141,7 @@ public class TicketDAO {
      * Check vehicle is or is not in the parking.
      * @param vehicleRegNumber given for checking,
      * @return true means the vehicle is here now.
+     * @author Subhi
      */
     public boolean isVehicleAlreadyParked(String vehicleRegNumber){
         Connection con = null;

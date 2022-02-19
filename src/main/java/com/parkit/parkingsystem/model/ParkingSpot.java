@@ -2,6 +2,10 @@ package com.parkit.parkingsystem.model;
 
 import com.parkit.parkingsystem.constants.ParkingType;
 
+/**
+ * @Author Tek
+ * Contains the number, type of vehicle and availability of parking slot for storing the information of the table parking
+ */
 public class ParkingSpot {
     private int number;
     private ParkingType parkingType;
@@ -37,7 +41,12 @@ public class ParkingSpot {
         this.isAvailable = isAvailable;
     }
 
-      @Override
+    /**
+     * Comparing two object of the parkingSpot (with the parking number)
+     * @param o
+     * @return true (if two object are same) or false
+     */
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         //(ParkingSpot) meaning is casting the o object of the class of Object as a ParkingSpot object

@@ -1,6 +1,10 @@
 package com.parkit.parkingsystem.model;
 import java.util.Date;
 
+/**
+ * @author Tek and Subhi
+ * Contains the attribute : id, parkingSpot,vehicleNumber,price,intime and outTime for storing the table ticket in DB
+ */
 public class Ticket {
     private int id;
     private ParkingSpot parkingSpot;
@@ -40,7 +44,7 @@ public class Ticket {
     public void setPrice(double price) {
         this.price = price;
     }
-
+    // Returning a reference to a mutable object value stored in one of the object's fields exposes the internal representation of the object.
     public Date getInTime() {
         if (inTime == null)
             return null;
@@ -54,7 +58,7 @@ public class Ticket {
         else
             this.inTime = new Date(inTime.getTime());
     }
-
+    //Returning a reference to a mutable object value stored in one of the object's fields exposes the internal representation of the object.
     public Date getOutTime() {
         if (outTime == null)
             return null;

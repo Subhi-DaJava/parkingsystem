@@ -128,7 +128,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareParkingTypeNullPakringSpotNumber0(){
+    public void calculateFareParkingTypeNullParkingSpotNumber0(){
         //GIVEN
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );

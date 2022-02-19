@@ -9,9 +9,13 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.commons.math3.util.Precision;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.Date;
 
+/**
+ * @author Tek
+ * Provide two major service for the parking system : processIncomingVehicle and processExitingVehicle
+ * and three methods : getVehicleRegNumber, getNextParkingNumberIfAvailable, getVehicleType
+ */
 public class ParkingService {
 
     private static final Logger logger = LogManager.getLogger("ParkingService");
@@ -94,7 +98,7 @@ public class ParkingService {
         }catch(IllegalArgumentException ie){
             logger.error("Error parsing user input for type of vehicle");
         }catch(Exception e){
-            logger.error("Error fetching next available parking slot", e);
+            logger.error("Error fetching next available parking slot");
         }
         return parkingSpot;
     }
@@ -150,7 +154,7 @@ public class ParkingService {
                 System.out.println("Unable to update ticket information. Error occurred");
             }
         }catch(Exception e){
-            logger.error("Unable to process exiting vehicle",e);
+            logger.error("Unable to process exiting vehicle");
         }
     }
 

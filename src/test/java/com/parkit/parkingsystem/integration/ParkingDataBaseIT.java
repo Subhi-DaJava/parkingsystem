@@ -71,10 +71,10 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingLotExit() {
+    public void testParkingLotExit() throws InterruptedException {
         ticketDAO.isVehicleAlreadyParked("ABCDEF");
         parkingService.processIncomingVehicle();
-
+        Thread.sleep(3000);
         parkingService.processExitingVehicle();
 
         assertEquals(ticketDAO.getTicket("ABCDEF").getPrice(),0.0);

@@ -4,7 +4,6 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.commons.math3.util.Precision;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -190,6 +188,26 @@ public class ParkingServiceTest {
         int parkingSpotNumber = parkingService.getNextParkingNumberIfAvailable().getId();
         //THEN
         assertEquals(1, parkingSpotNumber);
+    }
+    @Test
+    public  void getNextParkingNumberIfAvailable_whenParkingIsFull(){
+        //GIVEN
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
+        //WHEN
+
+        //THEN
+       assertNull(parkingService.getNextParkingNumberIfAvailable());
+    }
+    @Test
+    public  void getNextParkingNumberIfAvailable_whenParkingTypeIsUnknown(){
+        //GIVEN
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        //when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(-1);
+        //WHEN
+
+        //THEN
+        assertNull(parkingService.getNextParkingNumberIfAvailable());
     }
 
     @Test

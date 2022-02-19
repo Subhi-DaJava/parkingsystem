@@ -5,6 +5,10 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * @atuthor Tek and Subhi
+ * Allows to choose the type of parkingService(processIncoming or processExisting) or to exit the parking system
+ */
 public class InteractiveShell {
     private static final Logger logger = LogManager.getLogger("InteractiveShell");
     private InputReaderUtil inputReaderUtil ;
@@ -24,6 +28,9 @@ public class InteractiveShell {
         this.parkingService= new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
     }
 
+    /**
+     * Provide the information of the parking system for the interaction between the users and the system
+     */
     public void loadInterface() {
         logger.info("App initialized!!!");
         System.out.println("Welcome to Parking System!");
@@ -51,7 +58,7 @@ public class InteractiveShell {
             }
         }
     }
-
+    //Showing the information of the parking system
     private static void loadMenu(){
         System.out.println("Please select an option. Simply enter the number to choose an action");
         System.out.println("1 New Vehicle Entering - Allocate Parking Space");

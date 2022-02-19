@@ -4,6 +4,11 @@ import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
 
+/**
+ * Calculate the fare for a vehicle (less than 30 minutes and a recurring vehicle)
+ * @author Tek and Subhi
+ *
+ */
 public class FareCalculatorService {
 
     private TicketDAO ticketDAO;
@@ -14,6 +19,11 @@ public class FareCalculatorService {
         this.ticketDAO = new TicketDAO();
     }
 
+    /**
+     * When a ticket is providing(when a vehicle exit), this methode calculate the parking fee.
+     * @param ticket
+     * @Throws IllegalArgumentException for Unknown type of vehicle
+     */
     public void calculateFare(Ticket ticket){
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());

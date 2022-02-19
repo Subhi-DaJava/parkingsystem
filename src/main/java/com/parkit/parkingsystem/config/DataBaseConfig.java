@@ -7,10 +7,15 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
+/**
+ * @Author Tek and Subhi
+ * DataBaseConfig, allows to connect the Database and to close the connection
+ * and to close the PreparedStatement and ResultSet;
+ */
+
 public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
-
     public Connection getConnection() throws ClassNotFoundException, SQLException, IOException {
         logger.info("Create DB connection");
 
