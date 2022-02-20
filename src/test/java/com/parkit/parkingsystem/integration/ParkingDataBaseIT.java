@@ -8,10 +8,7 @@ import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -46,7 +43,7 @@ public class ParkingDataBaseIT {
     @BeforeEach
     private void setUpPerTest() {
         dataBasePrepareService.clearDataBaseEntries();
-        when(inputReaderUtil.readSelection()).thenReturn(1,2);
+        when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
     }
@@ -68,17 +65,42 @@ public class ParkingDataBaseIT {
         assertEquals(2,parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
         assertEquals(0.0, ticket.getPrice());
         assertEquals(1,ticket.getParkingSpot().getId());
+        assertTrue(ticketDAO.isVehicleAlreadyParked(ticket.getVehicleRegNumber()));
+    }
+
+    @Test
+    @DisplayName("This car is parked now")
+    public void testParkingCarAlreadyInTheParking() throws InterruptedException {
+
+        parkingService.processIncomingVehicle();
+        Thread.sleep(500);
+        parkingService.processIncomingVehicle();
+
+        assertTrue(ticketDAO.isVehicleAlreadyParked("ABCDEF"));
     }
 
     @Test
     public void testParkingLotExit() throws InterruptedException {
         ticketDAO.isVehicleAlreadyParked("ABCDEF");
         parkingService.processIncomingVehicle();
-        Thread.sleep(3000);
+        Thread.sleep(1000);
         parkingService.processExitingVehicle();
 
         assertEquals(ticketDAO.getTicket("ABCDEF").getPrice(),0.0);
         assertNotNull(ticketDAO.getTicket("ABCDEF"));
+    }
+    @Test
+    @DisplayName("5% discount message is displayed for Recurring user")
+    public void testParkingForVehicleRecurrent() throws InterruptedException {
+        parkingService.processIncomingVehicle();
+        Thread.sleep(1000);
+        parkingService.processExitingVehicle();
+        Thread.sleep(1000);
+        parkingService.processIncomingVehicle();
+
+        Ticket ticket = ticketDAO.getTicket("ABCDEF");
+
+        assertTrue(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber()));
     }
 
 }

@@ -16,7 +16,7 @@ public class DBConstants {
     //For getting the ticket
     public static final String GET_TICKET = "select t.PARKING_NUMBER, t.ID, t.PRICE, t.IN_TIME, t.OUT_TIME, p.TYPE from ticket t,parking p where p.parking_number = t.parking_number and t.VEHICLE_REG_NUMBER=? order by t.IN_TIME DESC limit 1";
     //For checking a vehicle is parked once or not (registered in the ticket table)
-    public static final String VEHICLE_RECURRENT = "select VEHICLE_REG_NUMBER from ticket where VEHICLE_REG_NUMBER = ? and PRICE > 0";
+    public static final String VEHICLE_RECURRENT = "select VEHICLE_REG_NUMBER from ticket where VEHICLE_REG_NUMBER = ? and OUT_TIME is not null";
     //For checking a vehicle is parking now or not in the parking ( registered in the parking table )
     public static final String CHECK_VEHICLE_PARKING = "select VEHICLE_REG_NUMBER from ticket where VEHICLE_REG_NUMBER = ? and isnull(OUT_TIME)";
 }
