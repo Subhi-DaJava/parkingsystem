@@ -71,10 +71,8 @@
             <version>3.6.1</version>
         </dependency>
         </dependencies>
-
     <build>
         <plugins>
-
             <plugin> <!---maven assembly plugin-->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -100,7 +98,6 @@
                         </configuration>
                     </execution>
                 </executions>
-
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -171,7 +168,6 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.9.1</version>
             </plugin>
-
         </plugins>
     </build>
     <reporting>

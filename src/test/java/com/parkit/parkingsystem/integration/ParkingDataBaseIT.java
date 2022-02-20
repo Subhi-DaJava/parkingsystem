@@ -66,17 +66,7 @@ public class ParkingDataBaseIT {
         assertEquals(0.0, ticket.getPrice());
         assertEquals(1,ticket.getParkingSpot().getId());
         assertTrue(ticketDAO.isVehicleAlreadyParked(ticket.getVehicleRegNumber()));
-    }
-
-    @Test
-    @DisplayName("This car is parked now")
-    public void testParkingCarAlreadyInTheParking() throws InterruptedException {
-
-        parkingService.processIncomingVehicle();
-        Thread.sleep(500);
-        parkingService.processIncomingVehicle();
-
-        assertTrue(ticketDAO.isVehicleAlreadyParked("ABCDEF"));
+        assertEquals(ticket.getVehicleRegNumber(),ticketDAO.getTicket("ABCDEF").getVehicleRegNumber());
     }
 
     @Test
@@ -88,19 +78,7 @@ public class ParkingDataBaseIT {
 
         assertEquals(ticketDAO.getTicket("ABCDEF").getPrice(),0.0);
         assertNotNull(ticketDAO.getTicket("ABCDEF"));
-    }
-    @Test
-    @DisplayName("5% discount message is displayed for Recurring user")
-    public void testParkingForVehicleRecurrent() throws InterruptedException {
-        parkingService.processIncomingVehicle();
-        Thread.sleep(1000);
-        parkingService.processExitingVehicle();
-        Thread.sleep(1000);
-        parkingService.processIncomingVehicle();
-
-        Ticket ticket = ticketDAO.getTicket("ABCDEF");
-
-        assertTrue(ticketDAO.isVehicleRecurrent(ticket.getVehicleRegNumber()));
+        assertNotNull(ticketDAO.getTicket("ABCDEF").getOutTime());
     }
 
 }
