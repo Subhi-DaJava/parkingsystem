@@ -210,15 +210,4 @@ public class ParkingServiceTest {
         assertNull(parkingService.getNextParkingNumberIfAvailable());
     }
 
-    @Test
-    public  void wrongVehicleTypeThrowExceptionTest(){
-        //GIVEN
-        when(inputReaderUtil.readSelection()).thenReturn(3);
-        //THEN
-        assertThrows(IllegalArgumentException.class, ()-> parkingService.getVehicleType());
-    }
-
-
-
-
 }

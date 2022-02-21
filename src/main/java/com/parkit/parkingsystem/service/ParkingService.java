@@ -107,7 +107,7 @@ public class ParkingService {
      * This method ask the client the type of his vehicle
      * @return ParkingType
      */
-    public ParkingType getVehicleType(){
+    private ParkingType getVehicleType(){
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
         System.out.println("2 BIKE");
