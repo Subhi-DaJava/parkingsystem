@@ -20,7 +20,7 @@ public class DataBaseConfig {
         logger.info("Create DB connection");
 
         Properties properties = new Properties();
-        properties.load(new FileInputStream("src/main/java/com/parkit/parkingsystem/connection.properties"));
+        properties.load(new FileInputStream("src/main/resources/connection.properties"));
 
         Class.forName(properties.getProperty("driver_class_name"));
         String url = properties.getProperty("urlProd");
