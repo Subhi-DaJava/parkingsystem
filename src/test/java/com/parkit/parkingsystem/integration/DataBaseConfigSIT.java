@@ -23,7 +23,7 @@ public class DataBaseConfigSIT {
         dataBaseConfig = new DataBaseConfig();
 
         Properties properties = new Properties();
-        properties.load(new FileInputStream("src/main/java/com/parkit/parkingsystem/connection.properties"));
+        properties.load(new FileInputStream("src/test/resources/connection.properties"));
         Class.forName(properties.getProperty("driver_class_name"));
         String url = properties.getProperty("urlTest");
         String root = properties.getProperty("user");
@@ -40,7 +40,7 @@ public class DataBaseConfigSIT {
     }
 
     @Test
-    void closeConnectionCloseConnection() throws SQLException {
+    void closeConnection() throws SQLException {
 
         // When
         dataBaseConfig.closeConnection(con);

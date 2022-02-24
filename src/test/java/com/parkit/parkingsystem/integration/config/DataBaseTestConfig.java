@@ -16,7 +16,7 @@ public class DataBaseTestConfig extends DataBaseConfig {
     public Connection getConnection() throws ClassNotFoundException, SQLException, IOException {
         logger.info("Create DB connection");
         Properties properties = new Properties();
-        properties.load(new FileInputStream("src/main/resources/connection.properties"));
+        properties.load(new FileInputStream("src/test/resources/connection.properties"));
 
         Class.forName(properties.getProperty("driver_class_name"));
         String url = properties.getProperty("urlTest");

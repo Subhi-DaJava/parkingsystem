@@ -113,7 +113,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/*IT.java</exclude>
-                        </excludes>
+                    </excludes>
                 </configuration>
                 <executions>
                     <execution>
