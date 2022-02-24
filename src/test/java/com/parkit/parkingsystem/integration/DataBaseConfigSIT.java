@@ -49,7 +49,7 @@ public class DataBaseConfigSIT {
 
     }
     @Test
-    void closePreparedStatementClosePreparedStatement()
+    void closePreparedStatement()
             throws SQLException {
         // When
         dataBaseConfig.closePreparedStatement(ps);
@@ -57,7 +57,7 @@ public class DataBaseConfigSIT {
         assertTrue(ps.isClosed());
     }
     @Test
-    void closeResultCloseResultSet() throws SQLException {
+    void closeResult() throws SQLException {
         // Given
         rs = ps.executeQuery();
         // When
